@@ -1,0 +1,3 @@
+{
+  "ground_truth": "{\"gt_parse\": {\"header\": {\"invoice_no\": \"2421542444\", \"invoice_date\": \"31/05/2019\", \"address\": \"SARADAR PATEL NEW DOMESTIC BLDG,SARDAR NAGAR,AHMEDABAD-382475\", \"pan\": \"AACCG2599K\", \"state\": \"27\", \"amount\": \"2027.00\", \"gstin_no\": \"27AAACK4409J1ZK\", \"total_price\": \"1863.00\"}, \"items\": [{\"item_desc\": \"Domestic/International Scheduled Air transport services of passengers\"}], \"summary\": {\"total_net_worth\": \"2116.00\"}}}"
+}
