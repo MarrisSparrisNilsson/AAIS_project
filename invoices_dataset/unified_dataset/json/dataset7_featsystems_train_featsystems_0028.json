@@ -1,0 +1,3 @@
+{
+  "ground_truth": "{\"gt_parse\": {\"header\": {\"invoice_no\": \"RV190101028995\", \"invoice_date\": \"18-03-2020\", \"address\": \"2nd Floor,C-Wing,Paragon Centre Pandurang Budhkar Marg,Worli MUMBAI 400030\", \"pan\": \"AABC13372H\", \"gstin_no\": \"27AAACH1201R1ZN\", \"total_value\": \"25,95,410.00\"}, \"items\": [{\"item_desc\": \"NoteBook TP E490 15 8G 10E\"}, {\"item_desc\": \"CASE BO Lenovo 15.6in Basic Backpack\", \"item_qty\": \"53\"}], \"summary\": {}}}"
+}
