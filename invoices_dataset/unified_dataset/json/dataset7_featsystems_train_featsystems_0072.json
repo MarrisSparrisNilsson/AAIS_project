@@ -1,0 +1,3 @@
+{
+  "ground_truth": "{\"gt_parse\": {\"header\": {\"invoice_no\": \"10028068\", \"invoice_date\": \"04-JULY-2022\", \"address\": \"PLOT NO 59,SHARDA NIVAS ,OPP MINORIT SUBHASH NAGAR MAIN ROAD BELAGAVI ,KARNATKA,INDIA- 590010\", \"gstin_no\": \"29BXLPK9082K1Zl\"}, \"items\": [{\"item_desc\": \"31623000035\\nMOUNT:TYPE:RACK,MFR P/N:WM-4-550400-WLD-Z6 MFR:\\nNETRACK,MATERIAL:STEEL,WIDTH:550 MM,LENGTH:400MM,MOUTNING METHOD:WALL ,HEIGHT:258 MM,STANDARD:DIN 41494,UL,USEFUL HEIGHT;4U,WITH ALL ACCESSORIES\", \"item_qty\": \"2.000\", \"item_net_price\": \"3040.00\"}], \"summary\": {\"total_net_worth\": \"6,080.00\"}}}"
+}
