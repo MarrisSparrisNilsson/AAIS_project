@@ -18,7 +18,7 @@ As an initial model test, we will experiment with the [**Qwen3-VL-2B**](https://
 
 **Planned program flow:**
 
-Invoice $\rightarrow$ Model $\rightarrow$ Structured output of Invoice $\rightarrow$ Model (OCR) $\rightarrow$ Text $\rightarrow$ Model (Structure of important info) $\rightarrow$ Structured output $\rightarrow$ Enter invoice information in database $\rightarrow$ Display in inventory UI.
+![Invoice -> Model -> Structured output of Invoice -> Model (OCR) -> Text -> Model (Structure of important info) -> Structured output -> Enter invoice information in database -> Display in inventory UI.](README_images/idea.jpg)
 
 ### Dataset
 
