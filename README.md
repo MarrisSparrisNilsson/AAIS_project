@@ -51,5 +51,7 @@ The primary datasets that will be used are various invoice datasets gathered fro
 - https://huggingface.co/datasets/featsystems/invoices
 ---
 **Example invoices from datasets:**
-![Example 1](README_images/dataset1_katanaml_train_katanaml_0109.jpg) 
-![Example 2](README_images/dataset2_docvqa_train_docvqa_1511.png) 
+
+<img src="README_images/dataset1_katanaml_train_katanaml_0109.jpg" alt="Example 1" width=450/> 
+
+<img src="README_images/dataset2_docvqa_train_docvqa_1511.png" alt="Example 1" width=450/>
