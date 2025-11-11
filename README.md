@@ -17,7 +17,7 @@ According to our estimations, multi-modal VLMs with a maximum of 6B billion para
 
 Given the above findings, we will initially experiment with [**Qwen3-VL-2B**](https://huggingface.co/docs/transformers/model_doc/qwen3_vl), which is a multi-modal vision-language model that is good for visual understanding and processing of text information. Our plan is to fine-tune this model for the tasks outlined below.
 
-**Planned program flow:**
+#### Planned program flow:
 
 ![Invoice -> Model -> Structured output of Invoice -> Model (OCR) -> Text -> Model (Structure of important info) -> Structured output -> Enter invoice information in database -> Display in inventory UI.](README_images/idea.jpg)
 
