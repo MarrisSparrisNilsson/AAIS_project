@@ -1,3 +1,0 @@
-{
-  "ground_truth": "{\"gt_parse\": {\"header\": {\"amount\": \"51,207.00\", \"igst\": \"9217.26\", \"total_value\": \"60,424.26\"}, \"items\": [{\"item_desc\": \"Custom Configuration\"}, {\"item_desc\": \"1Y Carry in service\"}, {\"item_desc\": \"1Y Basic Onsite Service Upgrade\"}, {\"item_desc\": \"Y2-4 Basic Onsite Service Extension\", \"item_qty\": \"1\"}], \"summary\": {}}}"
-}

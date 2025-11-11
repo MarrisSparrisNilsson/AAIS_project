@@ -1,3 +1,0 @@
-{
-  "ground_truth": "{\"gt_parse\": {\"header\": {\"invoice_no\": \"VST/783\", \"invoice_date\": \"12-07-2022\", \"po_number\": \"13542310381\", \"amount\": \"7174.00\", \"sgst\": \"547.20\", \"cgst\": \"547.20\", \"gstin_no\": \"29AAACH1201R2Z\", \"grand_total\": \"7174.00\"}, \"items\": [{\"item_desc\": \"4U Rack 500D \\nmodel : With Accessories\\nSerial:\"}], \"summary\": {}}}"
-}

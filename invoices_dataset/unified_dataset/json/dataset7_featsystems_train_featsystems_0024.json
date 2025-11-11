@@ -1,3 +1,0 @@
-{
-  "ground_truth": "{\"gt_parse\": {\"header\": {\"invoice_no\": \"HDA/SAVS/21/1145\", \"invoice_date\": \"16/10/2021\", \"address\": \"7TH FLOOR,BIRLA CENTURAIL PANDURANG BHUDKAR ROAD,WORLI MUMBAI ,400030,MAHARASHTRA INDIA\", \"pan\": \"AAACH1201R\", \"state\": \"maharashtra\", \"taxable_value\": \"929901.00\", \"sgst\": \"130186.01\", \"cgst\": \"130186.01\", \"igst\": \"0.00\", \"gstin_no\": \"27AAACH1201R1ZN\", \"hsn_code\": \"87032291\", \"total_price\": \"971280.00\"}, \"items\": [{\"item_desc\": \"VEHICLE SALES\", \"item_qty\": \"1.00\", \"item_net_price\": \"971280.00\"}], \"summary\": {\"total_net_worth\": \"1361840.00\"}}}"
-}

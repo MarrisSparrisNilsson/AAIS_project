@@ -1,3 +1,0 @@
-{
-  "ground_truth": "{\"gt_parse\": {\"header\": {\"invoice_date\": \"10-04-2024\", \"address\": \"Post Office Post Bag no 1,Yamanapur Village-Belgavi Works,Hindalco Industries Limited,Belgavi 590010\", \"pan\": \"AACL5292L\", \"gstin_no\": \"27AACL5292L1Z4\", \"hsn_code\": \"998313\", \"order_no\": \"13542319324\", \"grand_total\": \"4\"}, \"items\": [{\"item_desc\": \"AMC for IBM Servers and tape library as per annexure attached\"}, {\"item_desc\": \"AMC for IBM Servers and tape library as per annexure attached\"}, {\"item_desc\": \"AMC for IBM Servers and tape library as per annexure attached\"}, {\"item_desc\": \"AMC for IBM Servers and tape library as per annexure attached\", \"item_qty\": \"1`\"}], \"summary\": {}}}"
-}
