@@ -27,6 +27,13 @@ Given the above findings, we will initially experiment with [**Qwen3-VL-2B**](ht
 
 The datasets that will be used are various invoice datasets gathered from sources such as _Huggingface_ or _Kaggle_. The dataset include **images of invoices** (currently +2000 images) together with the **truth text data** within the images in json format.
 
+**Dataset from hugginface:**
+- https://huggingface.co/datasets/katanaml-org/invoices-donut-data-v1
+- https://huggingface.co/datasets/doceoSoftware/docvqa_invoices_v1
+- https://huggingface.co/datasets/Aoschu/German_invoices_dataset
+- https://huggingface.co/datasets/michalaerson/annotated-energy-invoices
+- https://huggingface.co/datasets/ilhamxx/xdata_invoices
+- https://huggingface.co/datasets/featsystems/invoices
 ---
 
 ### Team members:
