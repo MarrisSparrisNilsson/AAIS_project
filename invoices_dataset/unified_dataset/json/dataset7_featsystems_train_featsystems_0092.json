@@ -1,3 +1,0 @@
-{
-  "ground_truth": "{\"gt_parse\": {\"header\": {\"invoice_no\": \"AMC/2122/FA0019\", \"invoice_date\": \"28-09-2021\", \"address\": \"One World Center,Tower-17th floor,Jupiter mill compound,841,Senapati Bapat Marg,Elephistone Road,Mumbai 400013\", \"pan\": \"AAACB6134D\", \"amount\": \"252495\", \"gstin_no\": \"27AAACH1201R1ZN\", \"hsn_code\": \"87032291\", \"grand_total\": \"29922\"}, \"items\": [{\"item_desc\": \"Sale of Old Car of Lalit Kumar Apparao Kodi\"}], \"summary\": {}}}"
-}
