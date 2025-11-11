@@ -35,6 +35,9 @@ The datasets that will be used are various invoice datasets gathered from source
 - https://huggingface.co/datasets/ilhamxx/xdata_invoices
 - https://huggingface.co/datasets/featsystems/invoices
 ---
+**Example invoices from datasets:**
+![Example 1](README_images/dataset1_katanaml_train_katanaml_0109.jpg) 
+![Example 2](README_images/dataset2_docvqa_train_docvqa_1511.png) 
 
 ### Team members:
 
