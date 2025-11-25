@@ -1,3 +1,0 @@
-{
-  "ground_truth": "{\"gt_parse\": {\"header\": {\"invoice_no\": \"MH0119200309\", \"invoice_date\": \"22-09-2020\", \"address\": \"HINDALCO INDUSTRIES LTD.\\nB-Wing 1st floor, Ahura Centre , Mahakali Caves Road\\nAndheri(E),MUMBAI MAHARASHTRA-400093\", \"pan\": \"AAAACB9318D\", \"state\": \"AACH1201R\", \"amount\": \"39,502.54\", \"sgst\": \"5,180.87\", \"cgst\": \"5,180.87\", \"gstin_no\": \"27AAAACB9318D12W\", \"hsn_code\": \"8471\", \"customer_id\": \"HIL0031\", \"grand_total\": \"67,927.00\"}, \"items\": [{\"item_desc\": \"BEING LAPTOP TRF TO HINDALCO-ASWANI TIBRAWAL\"}, {\"item_desc\": \"BEING LAPTOP TRF TO HINDALCO- SANJIT DAS\"}, {\"item_desc\": \"BEING LAPTOP TRF TO HINDALCO- SALMAN HUSSAIN\"}], \"summary\": {\"total_net_worth\": \"57,565.26\"}}}"
-}

@@ -1,3 +1,0 @@
-{
-  "ground_truth": "{\"gt_parse\": {\"header\": {\"invoice_no\": \"227/2019-2020\", \"invoice_date\": \"5th June 2019\", \"address\": \"Gandhi Peace Centre,Khandagiri,bhubaneshwar Odisha\", \"pan\": \"AACPK9036G\", \"state\": \"Maharashtra\", \"amount\": \"13,81,105.16\", \"igst\": \"13,81,105.16\", \"gstin_no\": \"27AAACH1201R1ZN\"}, \"items\": [{\"item_desc\": \"Civil work\"}, {\"item_desc\": \"Carpentry Work\"}, {\"item_desc\": \"Electrical Work\"}, {\"item_desc\": \"POP and Gypsum ceiling\"}, {\"item_desc\": \"Painting and melamine polishing\"}, {\"item_desc\": \"Glass Rooming System\"}, {\"item_desc\": \"HVAC\"}, {\"item_desc\": \"miscellenieous Item\", \"item_net_price\": \"18.00\"}], \"summary\": {\"total_net_worth\": \"90,53,911.00\"}}}"
-}

@@ -1,3 +1,0 @@
-{
-  "ground_truth": "{\"gt_parse\": {\"header\": {\"invoice_no\": \"873100\", \"invoice_date\": \"22/05/2020\", \"amount\": \"Rs.700.00\"}, \"items\": [{\"item_desc\": \"Shared Hosting\"}, {\"item_desc\": \"Late Fee\", \"item_qty\": \"1\", \"item_net_price\": \"Rs.700.00\"}], \"summary\": {\"total_net_worth\": \"89,600.00\"}}}"
-}

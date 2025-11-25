@@ -1,9 +1,0 @@
-{
-  "texts": [
-    {
-      "source": "local",
-      "user": "Tarefa:\n\nAnalisa a imagem de uma fatura de energia e extrai a potência instalada, seguindo as regras abaixo.\nResponde à prompt apenas com o objeto JSON, sem qualquer outro texto.\n\nRegras:\n\n    1) A unidade da potência instalada é kW (kilo-watt) ou kVA (kilo-volt-ampere).\n\n    2) Se a potência instalada não puder ser extraída, utiliza null no campo JSON.\n\n    3) Não incluas explicações, introduções ou quaisquer outros textos além do JSON na resposta à prompt.\n\n    4) Formato esperado do JSON na tua resposta:\n\n        {\n            \"installed_power\": \"xx,xx kW\"\n        }\n",
-      "assistant": "{\n  \"installed_power\": \"10,35kW\"\n}"
-    }
-  ]
-}
