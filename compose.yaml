@@ -9,32 +9,32 @@ name: invoice_extractor
 # You can add other services your application may depend on here, such as a
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
-services:
-  server:
-    build:
-      context: .
-    ports:
-      - 8000:8000
+# services:
+#   server:
+#     build:
+#       context: .
+#     ports:
+#       - 8000:8000
 
-  db:
-    image: postgres:15
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: invoicedb
-    ports:
-      - 5432:5432
-    volumes:
-      - db-data:/var/lib/postgresql/data
+#   db:
+#     image: postgres:15
+#     environment:
+#       POSTGRES_USER: user
+#       POSTGRES_PASSWORD: password
+#       POSTGRES_DB: invoicedb
+#     ports:
+#       - 5432:5432
+#     volumes:
+#       - db-data:/var/lib/postgresql/data
 
-  web:
-    image: nginx:latest
-    ports:
-      - 80:80
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-    depends_on:
-      - server
+#   web:
+#     image: nginx:latest
+#     ports:
+#       - 80:80
+#     volumes:
+#       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+#     depends_on:
+#       - server
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
 # start the database before your application. The `db-data` volume persists the
@@ -68,3 +68,38 @@ services:
 #   db-password:
 #     file: db/password.txt
 
+version: "3.9"
+
+services:
+    # redis:
+    #   image: redis:7
+    #   ports:
+    #     - "6379:6379"
+
+    vlm_processor:
+        build: ./vlm
+        # environment:
+        #   - REDIS_HOST=redis
+        # depends_on:
+        #   - redis
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - capabilities: [gpu]
+        volumes:
+            - ./data:/data
+
+    # llm_processor:
+    #   build: ./llm
+    #   environment:
+    #     - REDIS_HOST=redis
+    #   depends_on:
+    #     - redis
+    #   deploy:
+    #     resources:
+    #       reservations:
+    #         devices:
+    #           - capabilities: [gpu]
+    #   volumes:
+    #     - ./data:/data

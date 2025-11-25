@@ -56,17 +56,35 @@
 # pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu126
 # FROM pytorch/pytorch:2.9.1-cuda12.6-cudnn9-runtime
 
-FROM python:3.15.0a1-alpine3.22
+# FROM python:3.15.0a1-alpine3.22
 
-# Your custom additions:
-RUN apt-get update && apt-get install -y git
+# # Your custom additions:
+# RUN apt-get update && apt-get install -y git
+
+# # Install Python packages
+# # RUN pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+
+# RUN pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu126
+
+# COPY . /app
+# WORKDIR /app
+
+# CMD ["python", "main.py"]
+
+FROM pytorch/pytorch:2.9.1-cuda12.6-cudnn9-runtime
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y git wget nano
+
+# Copy your code
+WORKDIR /app
+COPY . .
 
 # Install Python packages
-# RUN pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu126
+# Expose API port
+EXPOSE 8000
 
-COPY . /app
-WORKDIR /app
-
+# Run FastAPI app
 CMD ["python", "main.py"]
