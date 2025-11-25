@@ -1,0 +1,18 @@
+{
+  "model_used": "Qwen/Qwen3-VL-2B-Instruct",
+  "input_image": "dataset2_docvqa_test_docvqa_0001.png",
+  "timestamp": "2025-11-25T09:04:39.253977",
+  "prompt_used": "Read the OCR in the image. Do not repeat any text that has already been identified.",
+  "extracted_text": "Invoice no: 97159829\nDate of issue: 09/18/2015\n\nSeller:\nBradley-Andrade\n9879 Elizabeth Common\nLake Jonathan, RI 12335\nTax Id: 985-73-8194\nIBAN: GB81LZWO32519172531418\n\nClient:\nCastro PLC\nUnit 9678 Box 9664\nDPO AP 69387\nTax Id: 994-72-1270\n\nITEMS\nNo. Description Qty UM Net price Net worth VAT [%] Gross worth\n1. 12\" Marble Lapis Inlay Chess Table Top With 2\" Pieces & 15\" Wooden Stand W537 2,00 each 444,60 889,20 10% 978,12\n\nSUMMARY\nVAT [%] Net worth VAT Gross worth\n10% 889,20 88,92 978,12\nTotal $ 889,20 $ 88,92 $ 978,12",
+  "text_metrics": {
+    "total_characters": 523,
+    "total_words": 88,
+    "total_lines": 24
+  },
+  "extracted_fields": {
+    "invoice_number": "97159829",
+    "date": "09/18/2015",
+    "seller": "Bradley-Andrade",
+    "total_amount": "$978.12"
+  }
+}

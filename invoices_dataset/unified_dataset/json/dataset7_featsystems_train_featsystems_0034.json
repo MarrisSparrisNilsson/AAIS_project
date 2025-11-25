@@ -1,3 +1,0 @@
-{
-  "ground_truth": "{\"gt_parse\": {\"header\": {\"invoice_no\": \"1410515599\", \"invoice_date\": \"25/09/2020\", \"address\": \"2nd Floor,C-Wing,PARAGON CENTRE,PANDURANG BUDHKAR MARG,WORLI,MUMBAI 400030 MH India \", \"pan\": \"AAACH1201R\", \"gstin_no\": \"27AAACH1201R1ZN\", \"customer_no\": \"791114435\", \"order_no\": \"851893966\"}, \"items\": [], \"summary\": {}}}"
-}
