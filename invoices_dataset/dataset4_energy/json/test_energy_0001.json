@@ -1,0 +1,9 @@
+{
+  "texts": [
+    {
+      "source": "local",
+      "user": "Tarefa:\n\nAnalisa a imagem de uma fatura de energia e extrai a morada do cliente, seguindo as regras abaixo.\nResponde à prompt apenas com o objeto JSON, sem qualquer outro texto.\n\nRegras:\n\n    1) A morada do cliente pode localizar-se em dois sítios diferentes: abaixo do seu nome ou na secção 'Morada de Fornecimento'.\n\n    2) A morada do cliente é constituída por 4 partes: nome da rua/avenida, identificação da porta, código postal e localidade.\n\n    3) O código postal tem 7 dígitos e segue o seguinte formato: \"xxxx-xxx\".\n\n    4) Se a morada não puder ser extraída, utiliza null no campo JSON.\n\n    5) Não incluas explicações, introduções ou quaisquer outros textos além do JSON na resposta à prompt.\n\n    6) Formato esperado do JSON na tua resposta:\n\n        {\n            \"address\": \"xxxx xxxx xxxx-xxx xxxx\"\n        }",
+      "assistant": "{\n \"address\": \"RUA DOS GUERRAS 4 3DRT ALENQUER\"\n}"
+    }
+  ]
+}

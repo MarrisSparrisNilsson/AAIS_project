@@ -1,0 +1,1 @@
+Read the OCR in the image. Do not repeat any text that has already been identified.

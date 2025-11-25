@@ -1,0 +1,9 @@
+{
+  "texts": [
+    {
+      "source": "local",
+      "user": "Tarefa:\n\nAnalisa a imagem de uma fatura de energia e extrai o cpe (código do ponto de entrega), seguindo as regras abaixo.\nResponde à prompt apenas com o objeto JSON, sem qualquer outro texto.\n\nRegras:\n\n    1) O cpe tem exatamente 20 caracteres (4 letras e 16 dígitos).\n\n    2) Se o cpe não puder ser extraído, utiliza null no campo JSON.\n\n    3) Não incluas explicações, introduções ou quaisquer outros textos além do JSON na resposta à prompt.\n\n    4) Formato esperado do JSON na tua resposta:\n\n        {\n            \"cpe\": \"xxxxxxxxxxxxxxxxxxxx\"\n        }\n",
+      "assistant": "{\n  \"cpe\": \"PT0002000111308347MB\"\n}"
+    }
+  ]
+}

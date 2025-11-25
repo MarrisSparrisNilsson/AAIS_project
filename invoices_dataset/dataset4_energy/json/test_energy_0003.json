@@ -1,0 +1,9 @@
+{
+  "texts": [
+    {
+      "source": "local",
+      "user": "Tarefa:\n\nAnalisa a imagem de uma fatura de energia e extrai o NIF (Número de Identificação Fiscal) do cliente, seguindo as regras abaixo.\nResponde à prompt apenas com o objeto JSON, sem qualquer outro texto.\n\nRegras:\n\n    1) O NIF (identificação fiscal) do cliente tem exatamente 9 dígitos e não tem letras.\n\n    2) Se o NIF (identificação fiscal) não puder ser extraído, utiliza null no campo JSON.\n\n    3) Não incluas explicações, introduções ou quaisquer outros textos além do JSON na resposta à prompt.\n\n    4) Formato esperado do JSON na tua resposta:\n\n        {\n            \"client_nif\": \"xxxxxxxxx\"\n        }\n",
+      "assistant": "{\n  \"client_nif\": \"502238356\"\n}"
+    }
+  ]
+}

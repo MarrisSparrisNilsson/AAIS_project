@@ -1,0 +1,9 @@
+{
+  "texts": [
+    {
+      "source": "local",
+      "user": "Tarefa:\n\nAnalisa a imagem de uma fatura de energia e extrai a modalidade horária da tarifa contratada com o cliente, seguindo as regras abaixo.\n\nRegras:\n\n    1) O horário pode ser um dos seguintes 3 tipos: \"Simples\", \"Bi-Horário\" ou \"Tri-Horário\".\n\n    2) Se o horário não puder ser extraído, utiliza null no campo JSON.\n\n    3) Não incluas explicações, introduções ou quaisquer outros textos além do JSON na resposta à prompt.\n\n    4) Formato esperado do JSON na tua resposta:\n\n        {\n            \"time_modality\": \"xxxxxxxx\"\n        }\n",
+      "assistant": "{\n \"time_modality\": \"Simples\"\n}"
+    }
+  ]
+}
