@@ -58,7 +58,29 @@ The primary datasets that will be used are various invoice datasets gathered fro
 
 <img src="README_images/dataset1_katanaml_train_katanaml_0109.jpg" alt="Example 1" width=450/>
 
-<img src="README_images/dataset2_docvqa_train_docvqa_1511.png" alt="Example 1" width=450/>
+<img src="README_images/dataset2_docvqa_train_docvqa_1511.png" alt="Example 2" width=450/>
+
+---
+
+**Experiment Details:**
+
+Our first fine-tuning experiments consisted of tuning the OCR model to solely output the detected invoice number. These experiments are implemented in the `fine_tune_mlflow.ipynb` notebook along with the utilized hyperparameters, optimizers and metrics. To cut down on the training time, we only fine-tune about 1.1% of the model's 2 billion parameters. Below are a few screenshots from MLFlow:
+
+<img src="README_images/runs.png" alt="Screenshot from MLFlow of Runs screen" width=650/>
+
+This screenshot shows the runs performed using the latest model.
+
+<img src="README_images/loss.png" alt="Screenshot from MLFlow of loss metric decreasing over the training steps" width=650/>
+
+This screenshot shows the loss metric decreasing over the training steps as the model learns to adhere to the requested output, indicating that the fine-tuning process is successful.
+
+<img src="README_images/artifacts.png" alt="Screenshot from MLFlow of artifact screen of last succesful run" width=650/>
+
+This screenshot shows the artifacts produced by our latest run. Among the artifacts are the dependencies of the model (in terms of Python packages) and the checkpoint for the trained parts of the model at the final training step.
+
+**Initial Experiment Insights**
+
+From what we have seen, it would appear that the model which we selected can be fine-tuned to perform the tasks we require with relative ease. Further testing with larger subsets of the found datasets will be needed to truly assess how well the model can be fine-tuned, along with the implementation of some form of accuracy metric in order to check that the model outputs the correct information.
 
 ## Project Installation and Setup
 
@@ -68,13 +90,13 @@ If you are using **Conda environments**, run:
 conda env create -f environment.yml
 ```
 
-Otherwise if you use **Python**, then run:
+If you are using **virtual Python environments**, run:
 
 ```bash
 py -m pip install -r requirements.txt
 ```
 
-To run a initial test of the training and fine tuning with 3 images from the training set using Qwen3-VL model, follow the instructions inside the `fine_tune_test.ipynb` notebook.
+To run a initial test of the training and fine tuning with 3 images from the training set using Qwen3-VL model, follow the instructions inside the `fine_tune_mlflow.ipynb` notebook.
 
 **Note:** Running the fine-tuning requires access to a **cuda GPU** with around 8-12 GB VRAM.
 
@@ -88,4 +110,4 @@ For upcoming deployment steps we will be using Docker with docker compose files 
 
 ## Progressive Design Updates
 
-We decided to change the currently used model in exchange with a modification of Qwen3-VL named: [Qwen3-VL-2B-Instruct-unsloth-bnb-4bit](https://huggingface.co/unsloth/Qwen3-VL-2B-Instruct-unsloth-bnb-4bit). We noticed that the previous model took a long time to run locally which made us seek for a more lightweight version and this one utilizes quantization that essentially lowers the precision of the data type to save memory and computation.
+We decided to change the used model to an alternative Qwen3-VL model named: [Qwen3-VL-2B-Instruct-unsloth-bnb-4bit](https://huggingface.co/unsloth/Qwen3-VL-2B-Instruct-unsloth-bnb-4bit). We noticed that the previous model took a long time to run locally and therefore sought out a more lightweight version. This one utilizes quantization, which essentially means that the precision of the data type is decreased to save memory and computation.
