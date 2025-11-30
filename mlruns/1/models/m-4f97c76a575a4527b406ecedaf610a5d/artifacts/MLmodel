@@ -1,0 +1,19 @@
+artifact_path: /home/aron/courses/Advanced_AI_Systems/AAIS_project/mlruns/1/models/m-4f97c76a575a4527b406ecedaf610a5d/artifacts
+flavors:
+  python_function:
+    cloudpickle_version: 3.1.2
+    code: null
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.pyfunc.model
+    python_model: python_model.pkl
+    python_version: 3.14.0
+    streamable: false
+mlflow_version: 3.6.0
+model_id: m-4f97c76a575a4527b406ecedaf610a5d
+model_size_bytes: 4232
+model_uuid: m-4f97c76a575a4527b406ecedaf610a5d
+prompts: null
+run_id: 87a49102ff794858a427aac2c3fe5b95
+utc_time_created: '2025-11-25 12:43:06.330597'
