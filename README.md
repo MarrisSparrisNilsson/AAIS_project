@@ -45,12 +45,12 @@ The primary datasets that will be used are various invoice datasets gathered fro
 
 **Links to datasets:**
 
-- https://huggingface.co/datasets/katanaml-org/invoices-donut-data-v1
-- https://huggingface.co/datasets/doceoSoftware/docvqa_invoices_v1
-- https://huggingface.co/datasets/Aoschu/German_invoices_dataset
-- https://huggingface.co/datasets/michalaerson/annotated-energy-invoices
-- https://huggingface.co/datasets/ilhamxx/xdata_invoices
-- https://huggingface.co/datasets/featsystems/invoices
+-   https://huggingface.co/datasets/katanaml-org/invoices-donut-data-v1
+-   https://huggingface.co/datasets/doceoSoftware/docvqa_invoices_v1
+-   https://huggingface.co/datasets/Aoschu/German_invoices_dataset
+-   https://huggingface.co/datasets/michalaerson/annotated-energy-invoices
+-   https://huggingface.co/datasets/ilhamxx/xdata_invoices
+-   https://huggingface.co/datasets/featsystems/invoices
 
 ---
 
@@ -99,6 +99,44 @@ py -m pip install -r requirements.txt
 To run a initial test of the training and fine tuning with 3 images from the training set using Qwen3-VL model, follow the instructions inside the `fine_tune_mlflow.ipynb` notebook.
 
 **Note:** Running the fine-tuning requires access to a **cuda GPU** with around 8-12 GB VRAM.
+
+### Update `requirements.txt`
+
+1. Install pip-tools:
+
+```zh
+pip install pip-tools
+```
+
+2. Inspect your _top-level dependencies_:
+
+```zh
+pip list --not-required
+```
+
+3. Create a `requirements.in` file containing those _top-level dependencies_.
+
+Example `requirements.in`:
+
+```
+chronos-forecasting==2.1.0
+hf-xet==1.2.0
+httpx==0.28.1
+pandas==2.3.3
+pip-tools==7.5.2
+pipreqs==0.4.13
+pyarrow==22.0.0
+shellingham==1.5.4
+torch==2.9.0
+torchvision==0.24.0
+typer-slim==0.20.0
+```
+
+4. Run the following to generate `requirements.txt` file:
+
+```zh
+pip-compile requirements.in
+```
 
 ## Deployment
 
