@@ -1,4 +1,6 @@
 chronos-forecasting==2.1.0
+gradio==6.0.
+SQLAlchemy==2.0.44
 hf-xet==1.2.0
 httpx==0.28.1
 pandas==2.3.3

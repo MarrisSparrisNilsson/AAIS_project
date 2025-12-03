@@ -90,7 +90,11 @@ If you are using **Conda environments**, run:
 conda env create -f environment.yml
 ```
 
-If you are using **virtual Python environments**, run:
+If you are using **virtual Python environments**:
+
+> Run `install_dependencies.py` to install `requirements.txt` packages and `pytorch` installation.
+
+Or do it manually by running:
 
 ```bash
 py -m pip install -r requirements.txt
@@ -102,41 +106,7 @@ To run a initial test of the training and fine tuning with 3 images from the tra
 
 ### Update `requirements.txt`
 
-1. Install pip-tools:
-
-```zh
-pip install pip-tools
-```
-
-2. Inspect your _top-level dependencies_:
-
-```zh
-pip list --not-required
-```
-
-3. Create a `requirements.in` file containing those _top-level dependencies_.
-
-Example `requirements.in`:
-
-```
-chronos-forecasting==2.1.0
-hf-xet==1.2.0
-httpx==0.28.1
-pandas==2.3.3
-pip-tools==7.5.2
-pipreqs==0.4.13
-pyarrow==22.0.0
-shellingham==1.5.4
-torch==2.9.0
-torchvision==0.24.0
-typer-slim==0.20.0
-```
-
-4. Run the following to generate `requirements.txt` file:
-
-```zh
-pip-compile requirements.in
-```
+> Run the `update_requirements.py` to generate _top-level dependencies_ from your current `.venv`.
 
 ## Deployment
 
