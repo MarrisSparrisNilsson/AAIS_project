@@ -4,6 +4,8 @@
 #
 #    pip-compile requirements.in
 #
+gradio==6.0.2
+SQLAlchemy==2.0.44
 accelerate==1.12.0
     # via chronos-forecasting
 anyio==4.11.0
