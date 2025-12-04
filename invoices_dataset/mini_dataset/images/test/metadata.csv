@@ -1,3 +1,3 @@
-file_name,invoice_nr
-dataset1_katanaml_test_katanaml_0004.png,56014042
-dataset1_katanaml_test_katanaml_0005.png,16662010
+file_name,invoice_nr,date,total_amount
+dataset1_katanaml_test_katanaml_0004.png,56014042,10/01/2014,65.45
+dataset1_katanaml_test_katanaml_0005.png,16662010,08/28/2016,2259.10
