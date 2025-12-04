@@ -117,6 +117,10 @@ if __name__ == "__main__":
             # Begin UI layout
             gr.Markdown("# Invoice Browser")
 
+            gr.FileExplorer(
+                label="Explore Invoice Dataset", value="invoices_dataset/unified_dataset/images/", file_types=[".png"]
+            )
+
             with gr.Column():
                 gr.HTML(
                     """
