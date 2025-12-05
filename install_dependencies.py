@@ -1,4 +1,4 @@
-import importlib
+import importlib.util
 import os
 import subprocess
 import sys
@@ -31,7 +31,9 @@ def _install_requirements(requirements_file="requirements.txt"):
         print(f"Error: {requirements_file} does not exist.")
         return
     print(f"Installing packages from {requirements_file} into {VENV_DIR}...")
-    subprocess.run([venv_python, "-m", "pip", "install", "-r", requirements_file], check=True)
+    subprocess.run(
+        [venv_python, "-m", "pip", "install", "-r", requirements_file], check=True
+    )
     print("All packages installed successfully!")
 
 
@@ -64,7 +66,14 @@ def _install_pytorch():
     if gpu_choice in ["1", "2"]:
         if gpu_choice == "1":
             # GPU installation - latest version with CUDA (default latest supported CUDA)
-            cmd = ["pip3", "install", "torch", "torchvision", "--index-url", "https://download.pytorch.org/whl/cu126"]
+            cmd = [
+                "pip3",
+                "install",
+                "torch",
+                "torchvision",
+                "--index-url",
+                "https://download.pytorch.org/whl/cu126",
+            ]
         else:
             # CPU-only installation
             cmd = ["pip3", "install", "torch", "torchvision"]
@@ -77,7 +86,7 @@ def _install_pytorch():
     print("Exiting without installing PyTorch.")
 
 
-def install_dependencies(arg):
+def install_dependencies():
     _create_venv()
     _install_requirements()
     _install_pytorch()
