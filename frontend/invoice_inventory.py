@@ -100,6 +100,51 @@ def show_png(png_path):
     return gr.HTML(f"<iframe src='{png_path}' width='100%' height='800px'></iframe>")
 
 
+def invoice_inventory():
+    with gr.Blocks() as demo:
+
+        # Inject CSS (new Gradio method)
+        with open(Path("frontend/style.css").resolve()) as f:
+            css = f.read()
+        gr.HTML(f"<style>{css}</style>")
+
+        # Begin UI layout
+        gr.Markdown("# Invoice Browser")
+
+        with gr.Column():
+            gr.HTML(
+                """
+                        <h3>
+                            Search and browse invoices. Click on an invoice card to view the full invoice.
+                        </h3>
+                    """
+            )
+            search_input = gr.Textbox(placeholder="Hopkins", scale=2, label="Search Invoices")
+
+        invoice_count, initial_cards, _ = filter_invoices("")
+        cards_output = gr.HTML(initial_cards)
+
+        hidden_buttons_area = gr.Column(visible=True)
+
+        png_viewer = gr.HTML("")  # area where png is shown
+
+        def update_cards(query):
+            count_text, cards_html, button_info = filter_invoices(query)
+
+            # clear hidden button area and rebuild it
+            hidden_buttons_area.children = []
+            for btn_id, png_path in button_info:
+                b = gr.Button("", elem_id=btn_id)
+                b.click(show_png, inputs=gr.State(png_path), outputs=png_viewer)
+
+            return count_text, cards_html
+
+        search_input.change(update_cards, inputs=search_input, outputs=[invoice_count, cards_output])
+
+        return demo
+        # search_input.change(filter_invoices, inputs=search_input, outputs=[invoice_count, cards_output])
+
+
 if __name__ == "__main__":
 
     if False:
@@ -107,49 +152,6 @@ if __name__ == "__main__":
         # print("CSS Path:", Path("frontend/style.css").resolve())
     else:
 
-        with gr.Blocks() as demo:
-
-            # Inject CSS (new Gradio method)
-            with open(Path("frontend/style.css").resolve()) as f:
-                css = f.read()
-            gr.HTML(f"<style>{css}</style>")
-
-            # Begin UI layout
-            gr.Markdown("# Invoice Browser")
-
-            gr.FileExplorer(
-                label="Explore Invoice Dataset", value="invoices_dataset/unified_dataset/images/", file_types=[".png"]
-            )
-
-            with gr.Column():
-                gr.HTML(
-                    """
-                    <h3>
-                        Search and browse invoices. Click on an invoice card to view the full invoice.
-                    </h3>
-                """
-                )
-                search_input = gr.Textbox(placeholder="Hopkins", scale=2, label="Search Invoices")
-
-            invoice_count, initial_cards, _ = filter_invoices("")
-            cards_output = gr.HTML(initial_cards)
-
-            hidden_buttons_area = gr.Column(visible=True)
-
-            png_viewer = gr.HTML("")  # area where png is shown
-
-            def update_cards(query):
-                count_text, cards_html, button_info = filter_invoices(query)
-
-                # clear hidden button area and rebuild it
-                hidden_buttons_area.children = []
-                for btn_id, png_path in button_info:
-                    b = gr.Button("", elem_id=btn_id)
-                    b.click(show_png, inputs=gr.State(png_path), outputs=png_viewer)
-
-                return count_text, cards_html
-
-            # search_input.change(update_cards, inputs=search_input, outputs=[invoice_count, cards_output])
-            search_input.change(filter_invoices, inputs=search_input, outputs=[invoice_count, cards_output])
+        demo = invoice_inventory()
 
         demo.launch()
