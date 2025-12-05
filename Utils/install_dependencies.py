@@ -31,9 +31,7 @@ def _install_requirements(requirements_file="requirements.txt"):
         print(f"Error: {requirements_file} does not exist.")
         return
     print(f"Installing packages from {requirements_file} into {VENV_DIR}...")
-    subprocess.run(
-        [venv_python, "-m", "pip", "install", "-r", requirements_file], check=True
-    )
+    subprocess.run([venv_python, "-m", "pip", "install", "-r", requirements_file], check=True)
     print("All packages installed successfully!")
 
 
@@ -94,3 +92,6 @@ def install_dependencies():
 
 if __name__ == "__main__":
     install_dependencies()
+    # print(Path("requirements.txt").resolve())
+    # print(Path().cwd())
+    # print(Path(VENV_DIR).resolve())

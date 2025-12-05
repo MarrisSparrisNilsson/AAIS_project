@@ -1,7 +1,10 @@
-from pathlib import Path
 import subprocess
 from datetime import datetime
-from Utils.install_dependencies import install_dependencies
+from pathlib import Path
+
+from install_dependencies import install_dependencies
+
+# from install_dependencies import install_dependencies
 
 
 def update_requirements_in():
@@ -89,9 +92,7 @@ def restructure_requirements_in_file():
     # -----------------------------------------------------
     def is_autogen(line: str):
         return (
-            line.startswith("# torch==")
-            or line.startswith("# torchvision==")
-            or line.startswith("# ====== Updated:")
+            line.startswith("# torch==") or line.startswith("# torchvision==") or line.startswith("# ====== Updated:")
         )
 
     cleaned = [line for line in original_lines if not is_autogen(line)]
@@ -168,11 +169,57 @@ def update_requirements_txt():
     subprocess.run(["pip", "install", "pip-tools"])
 
     # Get top-level packages (like pip list --not-required)
-    subprocess.run(
-        ["pip-compile", "requirements.in", "--output-file", "requirements.txt"]
-    )
+    subprocess.run(["pip-compile", "requirements.in", "--output-file", "requirements.txt"])
 
     print(f"Requirements.txt updated successfully.")
+
+
+def remove_torch_block():
+    path = Path("requirements.txt").resolve()
+
+    if not path.exists():
+        print("File not found.")
+        return
+
+    with path.open("r", encoding="utf-8") as f:
+        lines = f.readlines()
+
+    new_lines = []
+    skip = False
+
+    for line in lines:
+        stripped = line.strip()
+
+        # -------------------------------------------------------
+        # Detect the torch package line (includes any version)
+        # -------------------------------------------------------
+        if stripped.startswith("torch=="):
+            skip = True
+            continue
+
+        # -------------------------------------------------------
+        # While skipping: keep skipping indented comment lines
+        # -------------------------------------------------------
+        if skip:
+            # Keep skipping until we reach a new top-level package line
+            if stripped == "" or stripped.startswith("#"):
+                continue  # skip empty or comment lines
+
+            if line.startswith(" "):
+                # Indented block comment (belongs to torch)
+                continue
+
+            # A NEW package line found → stop skipping
+            skip = False
+
+        # If not skipping, keep the line
+        new_lines.append(line)
+
+    # Write updated file
+    with path.open("w", encoding="utf-8") as f:
+        f.writelines(new_lines)
+
+    print("Torch and its associated block removed.")
 
 
 if __name__ == "__main__":
@@ -182,3 +229,4 @@ if __name__ == "__main__":
     dedupe_requirements_in()
     restructure_requirements_in_file()
     update_requirements_txt()
+    remove_torch_block()
