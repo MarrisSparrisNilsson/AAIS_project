@@ -40,7 +40,7 @@ def load_model():
         
         # FIRST: Try to find any available model in the models registry
         print("Searching for available models in registry...")
-        models_dir = "mlruns/1/models"
+        models_dir = "mlruns/2/models"
         available_models = []
         
         if os.path.exists(models_dir):

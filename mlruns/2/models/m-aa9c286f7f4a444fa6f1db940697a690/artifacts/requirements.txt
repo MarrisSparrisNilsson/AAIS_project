@@ -1,0 +1,12 @@
+mlflow==3.6.0
+aiohttp==3.13.2
+backports-tarfile==1.2.0
+cloudpickle==3.1.2
+defusedxml==0.7.1
+ipython==9.7.0
+numpy==2.3.5
+pandas==2.3.3
+pyarrow==22.0.0
+scikit-learn==1.7.2
+scipy==1.16.3
+unsloth==2025.11.3
