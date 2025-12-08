@@ -2,7 +2,6 @@ import gradio as gr
 import os
 import json
 import requests
-from pathlib import Path
 
 # FastAPI backend URL (use service name when in Docker)
 BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8000")
@@ -116,4 +115,4 @@ with gr.Blocks(title="Invoice Extractor") as demo:
     )
 
 if __name__ == "__main__":
-    demo.launch(server_name="127.0.0.1", server_port=7860, share=False)
+    demo.launch(server_name="0.0.0.0", server_port=7860, share=False)
