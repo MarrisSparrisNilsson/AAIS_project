@@ -13,9 +13,14 @@ services:
       - ./mlruns:/app/mlruns
       # Mount mlflow.db (so MLflow data persists)
       - ./mlflow.db:/app/mlflow.db
+      # Mount invoices dataset (for testing purposes)
+      - ./invoices_dataset:/app/invoices_dataset
     environment:
       - MLFLOW_TRACKING_URI=sqlite:///mlflow.db
       - PYTHONUNBUFFERED=1
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    gpus: all
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
