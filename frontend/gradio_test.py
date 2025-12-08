@@ -1,59 +1,46 @@
 import gradio as gr
 import os
 import json
-import mlflow
-from mlflow.tracking import MlflowClient
-import pandas as pd
+import requests
+from pathlib import Path
 
-mlflow_tracking_uri = os.environ.get("MLFLOW_TRACKING_URI") or f"sqlite:///{os.path.abspath('mlflow.db')}"
-mlflow.set_tracking_uri(mlflow_tracking_uri)
+# FastAPI backend URL (use service name when in Docker)
+BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8000")
 
 approved_invoices = []
 
-def get_last_run_id(experiment_name="qwen3-vl-invoice-finetune"):
-    client = MlflowClient()
-    exp = client.get_experiment_by_name(experiment_name)
-    if exp is None:
-        raise ValueError(f"Experiment not found: {experiment_name}")
-    runs = client.search_runs([exp.experiment_id], order_by=["start_time DESC"], max_results=1)
-    if not runs:
-        return None
-    return runs[0].info.run_id
-
-run_id = get_last_run_id()
-model_uri = f"runs:/{run_id}/qwen3vl_finetuned_extraction"
-model = mlflow.pyfunc.load_model(model_uri)
-
-def extract_info(image_path):
-    """Extract invoice info from image."""
-    if image_path is None:
+def extract_info_via_api(image_file):
+    """Extract invoice info by uploading to FastAPI backend."""
+    if image_file is None:
         return None, ""
     
-    input_df = pd.DataFrame([{
-        "image": image_path,
-        "instruction": "Read the OCR in the image. Extract the invoice number, date, and total amount. Provide the output in the following format: JSON with keys 'invoice_nr', 'date', and 'total_amount'."
-    }])
-    
-    preds = model.predict(input_df)
-    raw_pred = str(preds.iloc[0]["prediction"])
-    
     try:
-        start = raw_pred.find("{")
-        if start != -1:
-            depth = 0
-            for i in range(start, len(raw_pred)):
-                if raw_pred[i] == "{":
-                    depth += 1
-                elif raw_pred[i] == "}":
-                    depth -= 1
-                    if depth == 0:
-                        json_str = raw_pred[start : i + 1]
-                        parsed = json.loads(json_str)
-                        return json.dumps(parsed, indent=2), json.dumps(parsed)
-    except Exception as e:
-        pass
+        # Upload file to FastAPI /predict endpoint
+        with open(image_file, "rb") as f:
+            files = {"file": f}
+            response = requests.post(
+                f"{BACKEND_URL}/predict",
+                files=files
+            )
+        
+        if response.status_code != 200:
+            return f"Error: {response.status_code} - {response.text}", ""
+        
+        result = response.json()
+        raw_pred = result.get("prediction", "")
+        parsed_json = result.get("parsed_json", {})
+        
+        if parsed_json:
+            display_text = json.dumps(parsed_json, indent=2)
+            state_json = json.dumps(parsed_json)
+        else:
+            display_text = raw_pred
+            state_json = raw_pred
+        
+        return display_text, state_json
     
-    return raw_pred, raw_pred
+    except Exception as e:
+        return f"Error connecting to backend: {str(e)}", ""
 
 def approve_invoice(prediction_state):
     """Approve and store the invoice prediction."""
@@ -68,7 +55,7 @@ def approve_invoice(prediction_state):
             f"Invoice {i+1}: {json.dumps(inv)}"
             for i, inv in enumerate(approved_invoices)
         ])
-        return "✓ Invoice approved!", approved_list
+        return "Invoice approved!", approved_list
     except Exception as e:
         return f"Error approving invoice: {str(e)}", ""
 
@@ -83,6 +70,7 @@ def get_approved_list():
 
 with gr.Blocks(title="Invoice Extractor") as demo:
     gr.Markdown("# Invoice Information Extractor")
+    gr.Markdown(f"Backend: {BACKEND_URL}")
     
     prediction_state = gr.State(value="")
     approved_list_state = gr.State(value="")
@@ -107,9 +95,9 @@ with gr.Blocks(title="Invoice Extractor") as demo:
             approved_list_display = gr.Textbox(label="List of Approved Invoices", lines=15, interactive=False)
             refresh_btn = gr.Button("Refresh", variant="secondary")
     
-    # Connect extract button
+    # Connect extract button to FastAPI backend
     extract_btn.click(
-        fn=extract_info,
+        fn=extract_info_via_api,
         inputs=image_input,
         outputs=[prediction_display, prediction_state]
     )
@@ -121,11 +109,11 @@ with gr.Blocks(title="Invoice Extractor") as demo:
         outputs=[status_msg, approved_list_state]
     )
     
-    # Connect refresh button on approved list tab
+    # Connect refresh button
     refresh_btn.click(
         fn=get_approved_list,
         outputs=approved_list_display
     )
 
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(server_name="127.0.0.1", server_port=7860, share=False)
