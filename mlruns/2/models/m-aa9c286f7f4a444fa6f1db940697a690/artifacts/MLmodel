@@ -1,0 +1,23 @@
+artifact_path: /home/isac/AAIS/AAIS_project/mlruns/2/models/m-aa9c286f7f4a444fa6f1db940697a690/artifacts
+flavors:
+  python_function:
+    artifacts:
+      adapter:
+        path: artifacts/checkpoint-30
+        uri: outputs/checkpoint-30
+    cloudpickle_version: 3.1.2
+    code: null
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.pyfunc.model
+    python_model: python_model.pkl
+    python_version: 3.13.9
+    streamable: false
+mlflow_version: 3.6.0
+model_id: m-aa9c286f7f4a444fa6f1db940697a690
+model_size_bytes: 146773865
+model_uuid: m-aa9c286f7f4a444fa6f1db940697a690
+prompts: null
+run_id: 71609f58c9c6451b9dd8f5e809d35167
+utc_time_created: '2025-11-25 19:02:27.762053'
