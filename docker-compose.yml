@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  invoice-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: invoice-extraction-api
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount mlruns directory (so model updates don't require rebuild)
+      - ./mlruns:/app/mlruns
+      # Mount mlflow.db (so MLflow data persists)
+      - ./mlflow.db:/app/mlflow.db
+    environment:
+      - MLFLOW_TRACKING_URI=sqlite:///mlflow.db
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
