@@ -6,7 +6,7 @@ from collections import defaultdict
 def find_exact_duplicates_simple():
     """Simple MD5-based duplicate detection"""
     
-    unified_dir = "./invoices_dataset/unified_dataset"
+    unified_dir = "src/mlflow/invoices_dataset/unified_dataset"
     images_dir = f"{unified_dir}/images"
     
     print("🔍 FINDING EXACT DUPLICATES (MD5 HASH)")

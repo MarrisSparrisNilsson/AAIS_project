@@ -8,9 +8,9 @@ services:
       - "8000:8000"
     volumes:
       # Mount mlruns directory (so model updates don't require rebuild)
-      - ./mlruns:/app/mlruns
+      - ./src/mlflow/mlruns:/app/mlruns
       # Mount mlflow.db (so MLflow data persists)
-      - ./mlflow.db:/app/mlflow.db
+      - ./src/mlflow/mlflow.db:/app/mlflow.db
       # Mount invoices dataset (for testing purposes)
       - ./invoices_dataset:/app/invoices_dataset
     environment:

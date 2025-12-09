@@ -21,8 +21,8 @@ COPY src/model/app.py .
 
 # Copy MLflow database and model artifacts
 # Note: mlruns/ directory should be copied or mounted as volume
-COPY mlflow.db .
-COPY mlruns/ ./mlruns/
+#COPY mlflow.db .
+#COPY mlruns/ ./mlruns/
 
 # Expose FastAPI port
 EXPOSE 8000
