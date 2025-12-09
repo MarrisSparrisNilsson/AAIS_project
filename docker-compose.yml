@@ -2,7 +2,7 @@ services:
   invoice-api:
     build:
       context: .
-      dockerfile: Dockerfile.model
+      dockerfile: src/model/Dockerfile.model
     container_name: invoice-extraction-api
     ports:
       - "8000:8000"
@@ -29,7 +29,7 @@ services:
   gradio-ui:
     build:
       context: .
-      dockerfile: frontend/Dockerfile.gradio
+      dockerfile: src/frontend/Dockerfile.gradio
     container_name: gradio-invoice-ui
     ports:
       - "7860:7860"

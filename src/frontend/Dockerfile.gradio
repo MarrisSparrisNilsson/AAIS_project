@@ -6,12 +6,11 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y build-essential curl && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
-COPY frontend/requirements_frontend.txt requirements.txt
+COPY src/frontend/requirements_frontend.txt requirements.txt
 RUN pip install --upgrade pip 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY frontend/gradio_test.py app.py
-
+COPY src/frontend/gradio_test.py app.py
 EXPOSE 7860
 
 ENV PYTHONUNBUFFERED=1
