@@ -124,6 +124,21 @@ def load_model():
         traceback.print_exc()
         raise
 
+def load_model_via_registry(model_name="qwen3vl-finetuned"):
+    """Load model from MLflow Model Registry."""
+    global model
+    model_version = "latest"
+    print(f"Loading model '{model_name}' from MLflow Model Registry...")
+    try:
+        model = mlflow.pyfunc.load_model(f"models:/{model_name}/{model_version}")
+        print("Model loaded successfully from registry!")
+        return model
+    except Exception as e:
+        print(f"❌ Error loading model from registry: {e}")
+        import traceback
+        traceback.print_exc()
+        raise
+
 @asynccontextmanager
 async def lifespan(app):
     """Load model on startup, cleanup on shutdown."""
