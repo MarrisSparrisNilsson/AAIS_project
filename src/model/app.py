@@ -8,6 +8,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from typing import Optional
 from contextlib import asynccontextmanager
+from unsloth import FastVisionModel
 import uvicorn
 
 # Setup MLflow
@@ -119,7 +120,7 @@ def load_model():
         raise ValueError(f"Could not find model artifact in run {run_id}")
         
     except Exception as e:
-        print(f"❌ Error loading model: {e}")
+        print(f"Error loading model: {e}")
         import traceback
         traceback.print_exc()
         raise
@@ -134,10 +135,66 @@ def load_model_via_registry(model_name="qwen3vl-finetuned"):
         print("Model loaded successfully from registry!")
         return model
     except Exception as e:
-        print(f"❌ Error loading model from registry: {e}")
+        print(f"Error loading model from registry: {e}")
         import traceback
         traceback.print_exc()
         raise
+
+def load_base_model():
+    """Load the base (non-finetuned) Qwen model."""
+    model, tokenizer = FastVisionModel.from_pretrained(
+        "unsloth/Qwen3-VL-2B-Instruct-bnb-4bit",
+        load_in_4bit=True,
+        use_gradient_checkpointing="unsloth"
+    )
+    FastVisionModel.for_inference(model)
+    return model, tokenizer
+
+class BaseVisionPyFunc:
+    """
+    Pyfunc-like wrapper exposing predict(DataFrame) for the base Unsloth Qwen3-VL model.
+    Returns a DataFrame with a 'prediction' column, matching mlflow.pyfunc models.
+    """
+    def __init__(self, base_model, base_tokenizer):
+        import torch
+        self.model = base_model.eval()
+        self.tokenizer = base_tokenizer
+        try:
+            self.device = next(self.model.parameters()).device
+        except Exception:
+            self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    def predict(self, df: pd.DataFrame) -> pd.DataFrame:
+        import torch
+        from PIL import Image
+        results = []
+        for _, row in df.iterrows():
+            img = row["image"]
+            if isinstance(img, str):
+                img = Image.open(img).convert("RGB")
+            instruction = row.get(
+                "instruction",
+                "Read the OCR in the image. Extract the invoice number, date, and total gross amount. Do not extract the currency unit for the total amount. Ensure that your output has no spaces between numbers or letters. Provide the output in the following format: JSON with keys 'invoice_nr', 'date', and 'total_amount'. All values should be represented as strings, not numbers. Provide only the requested JSON in your response."
+            )
+            messages = [{"role": "user", "content": [{"type": "image", "image": img}, {"type": "text", "text": instruction}]}]
+            input_text = self.tokenizer.apply_chat_template(messages, add_generation_prompt=True)
+            inputs = self.tokenizer(img, input_text, return_tensors="pt")
+            try:
+                inputs = inputs.to(self.device)
+            except Exception:
+                pass
+            with torch.no_grad():
+                gen = self.model.generate(
+                    **inputs,
+                    max_new_tokens=400,
+                    use_cache=True,
+                    temperature=0.5,
+                    min_p=0.1,
+                )
+            gen_trimmed = [out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.input_ids, gen)]
+            decoded = self.tokenizer.batch_decode(gen_trimmed, skip_special_tokens=True)
+            results.append(decoded[0] if isinstance(decoded, (list, tuple)) else str(decoded))
+        return pd.DataFrame({"prediction": results})
 
 @asynccontextmanager
 async def lifespan(app):
@@ -147,13 +204,15 @@ async def lifespan(app):
     print("Starting FastAPI server...")
     print("=" * 50)
     try:
-        load_model()
+        base_m, base_t = load_base_model()
+        model = BaseVisionPyFunc(base_m, base_t)
+        #load_model() # Load finetuned model
         print("=" * 50)
-        print("✅ Server ready! Model loaded successfully.")
+        print("Server ready! Model loaded successfully.")
         print("=" * 50)
     except Exception as e:
         print("=" * 50)
-        print(f"❌ CRITICAL: Failed to load model: {e}")
+        print(f"CRITICAL: Failed to load model: {e}")
         print("Server will start but predictions will fail.")
         print("=" * 50)
         import traceback
@@ -201,7 +260,7 @@ async def predict_invoice(file: UploadFile = File(...)):
         # Prepare input DataFrame
         input_df = pd.DataFrame([{
             "image": temp_path,
-            "instruction": "Read the OCR in the image. Extract the invoice number, date, and total amount. Provide the output in the following format: JSON with keys 'invoice_nr', 'date', and 'total_amount'."
+            "instruction": "Read the OCR in the image. Extract the invoice number, date, and total gross amount. Do not extract the currency unit for the total amount. Ensure that your output has no spaces between numbers or letters. Provide the output in the following format: JSON with keys 'invoice_nr', 'date', and 'total_amount'. All values should be represented as strings, not numbers. Provide only the requested JSON in your response."
         }])
         
         # Get prediction
@@ -256,7 +315,7 @@ async def predict_invoice_path(image_path: str):
         # Prepare input DataFrame
         input_df = pd.DataFrame([{
             "image": image_path,
-            "instruction": "Read the OCR in the image. Extract the invoice number, date, and total amount. Provide the output in the following format: JSON with keys 'invoice_nr', 'date', and 'total_amount'."
+            "instruction": "Read the OCR in the image. Extract the invoice number, date, and total gross amount. Do not extract the currency unit for the total amount. Ensure that your output has no spaces between numbers or letters. Provide the output in the following format: JSON with keys 'invoice_nr', 'date', and 'total_amount'. All values should be represented as strings, not numbers. Provide only the requested JSON in your response."
         }])
         
         # Get prediction

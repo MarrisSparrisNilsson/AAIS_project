@@ -381,4 +381,4 @@ if __name__ == "__main__":
         print("Proceeding with base model evaluation only\n")
     
     # Run evaluation with verbose=True for debug output
-    evaluate_models(finetuned_model=finetuned_model, limit=100, verbose=False)
+    evaluate_models(finetuned_model=finetuned_model, limit=150, verbose=False)
