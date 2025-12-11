@@ -162,6 +162,7 @@ After starting with `docker-compose up`:
 ```bash
 curl -X POST "http://localhost:8000/process-invoice" \
   -F "file=@path/to/invoice.jpg"
+```
 
 
 
