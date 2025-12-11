@@ -1,4 +1,5 @@
 services:
+  # Invoice Extraction Model API
   invoice-api:
     build:
       context: .
@@ -7,7 +8,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      # Mount mlruns directory (so model updates don't require rebuild)
+      # Mount mlruns directory
       - ./src/mlflow/mlruns:/app/mlruns
       # Mount mlflow.db (so MLflow data persists)
       - ./src/mlflow/mlflow.db:/app/mlflow.db
@@ -26,6 +27,7 @@ services:
       timeout: 10s
       retries: 3
 
+  # Gradio UI for Invoice Extraction
   gradio-ui:
     build:
       context: .
@@ -46,4 +48,3 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-
