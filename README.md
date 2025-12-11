@@ -28,7 +28,7 @@ Given the above findings, we will initially experiment with [**Qwen3-VL-2B**](ht
 
 #### Planned program flow:
 
-![Invoice -> Model -> Structured output of Invoice -> Model (OCR) -> Text -> Model (Structure of important info) -> Structured output -> Enter invoice information in database -> Display in inventory UI.](README_images/idea.jpg)
+![Invoice -> Model -> Structured output of Invoice -> Model (OCR) -> Text -> Model (Structure of important info) -> Structured output -> Enter invoice information in database -> Display in inventory UI.](README_images/c_idea.png)
 
 1. **Input:** User provides an invoice as an image or PDF.
 2. **OCR:** The invoice is passed to an OCR Engine (most likely implemented via a ViT) which solely converts the text on the image into a text file.
