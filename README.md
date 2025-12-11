@@ -14,7 +14,7 @@
 
 <!-- What is the real-world problem being tackled? -->
 
-In a real world scenario, businesses handle a lot of invoice documents that are to be processed and information to be extracted from them. Some businesses might already have an automatic document process pipeline that is triggered right when an order is placed and stores all information in a database. On the other hand, if documents are not automatically handled, this project aims to handle invoices by scanning these documents with the help of state-of-the-art Optical Character Recognition (OCR), extracting relevant information (such as invoice number, products purchased, total cost) and generating appropriate database queries based on the extracted information.
+In a real world scenario, businesses handle a lot of invoice documents that are to be processed and information to be extracted from them. Some businesses might already have an automatic document process pipeline that is triggered right when an order is placed and stores all information in a database. On the other hand, if documents are not automatically handled, this project aims to handle invoices by scanning these documents with the help of state-of-the-art Optical Character Recognition (OCR) and extracting relevant information (such as invoice number, invoice date, total cost).
 
 ### Pre-trained model/method
 
@@ -24,13 +24,12 @@ To get an understanding of what models might be of most use to us, we found [thi
 
 According to our estimations, multi-modal VLMs with a maximum of 6B billion parameters or less would be suited for our application in order to run it on our local machine. If the accuracy becomes too poor or we find that the capabilities of the model is too limited, we will look at models with a larger amount of parameters and try to run it on an A-100 GPU.
 
-Given the above findings, we will initially experiment with [**Qwen3-VL-2B**](https://huggingface.co/docs/transformers/model_doc/qwen3_vl), which is a multi-modal vision-language model that is good for visual understanding and processing of text information. Our plan is to fine-tune this model for the tasks outlined below.
+Reviewing the models available on [Hugging Face](https://huggingface.co/models?pipeline_tag=image-text-to-text&sort=downloads) revealed that when sorting on most downloaded models for the task of Image-text-to-Text, four out of the top five are versions of the Qwen-model.
+
+Given the above findings, we elected to utilize [**Qwen3-VL-2B**](https://huggingface.co/docs/transformers/model_doc/qwen3_vl), which is a multi-modal vision-language model that is good for visual understanding and processing of text information. Our plan is to fine-tune this model for the tasks outlined below.
 
 #### Planned program flow:
 ![Invoice -> Model -> Structured output of Invoice -> Model (OCR) -> Text -> Model (Structure of important info) -> Structured output -> Enter invoice information in database -> Display in inventory UI.](README_images/idea.jpg)
-
-#### Actual program flow:
-![Invoice -> Model -> Structured output of Invoice -> Model (OCR) -> Text -> Model (Structure of important info) -> Structured output -> Enter invoice information in database -> Display in inventory UI.](README_images/c_idea.png)
 
 1. **Input:** User provides an invoice as an image or PDF.
 2. **OCR:** The invoice is passed to an OCR Engine (most likely implemented via a ViT) which solely converts the text on the image into a text file.
@@ -173,6 +172,9 @@ curl -X POST "http://localhost:8000/process-invoice" \
 
 We decided to change the used model to an alternative Qwen3-VL model named: [Qwen3-VL-2B-Instruct-unsloth-bnb-4bit](https://huggingface.co/unsloth/Qwen3-VL-2B-Instruct-unsloth-bnb-4bit). We noticed that the previous model took a long time to run locally and therefore sought out a more lightweight version. This one utilizes quantization, which essentially means that the precision of the data type is decreased to save memory and computation.
 
+#### Actual program flow:
+![Invoice -> Model -> Structured output of Invoice -> Model (OCR) -> Text -> Model (Structure of important info) -> Structured output -> Enter invoice information in database -> Display in inventory UI.](README_images/c_idea.png)
+
 ## Code/Docker file references
 **Repository Structure:**
 - `docker-compose.yml` - Docker setup for all services
@@ -183,7 +185,7 @@ We decided to change the used model to an alternative Qwen3-VL model named: [Qwe
 
 ## Conclusion and Reflection
 
-The project successfully implemented an invoice processing system using a pre-trained Qwen3-VL-2B model. Docker containerization worked well for consistent deployment, and MLFlow effectively tracked experiments.FastAPI provided a robust API for the application.
+We attempted to implement an invoice processing system using a pre-trained Qwen3-VL-2B model. Docker containerization worked well for consistent deployment, and MLFlow effectively tracked experiments. FastAPI provided a robust API for the application.
 
 However, the main challenge was fine-tuning, where results sometimes worsened rather than improved, and integrating all components into a complete pipeline required significant effort.
 
