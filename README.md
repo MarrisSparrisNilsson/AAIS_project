@@ -37,6 +37,12 @@ Given the above findings, we will initially experiment with [**Qwen3-VL-2B**](ht
 5. **Query Generation & Execution:** The JSON document is passed to an agent fine-tuned to generate SQL queries to add or update the extracted information to the database, and these queries are autonomously executed through a Model Context Protocol (MCP) connection to the database.
 6. **Visible Change:** The user can inspect the updated database directly through a web-based UI.
 
+#### AI Component: System Overview
+- User Interaction:
+    End-users interact with the system through a web-based UI. They upload an invoice image file (e.g., PNG or JPG format) via a drag-and-drop interface or file selector. The system then processes the invoice automatically and displays the extracted information for review.
+- Outputs:
+    The system generates structured JSON documents containing the extracted invoice information, such as invoice number, products purchased, total cost, and vendor details. 
+
 ### Experiment and Dataset
 
 <!-- What dataset is planned to be used, and how to collect data for the project -->
@@ -95,6 +101,26 @@ If you are using **virtual Python environments**, run:
 ```bash
 py -m pip install -r requirements.txt
 ```
+If want start MLFlow server locally, run:
+
+```mlflow ui --backend-store-uri sqlite:///mlflow.db
+```
+To run training/evaluation 
+```bash
+python XXXXXXXXXXXXXXXXXXXXXXX
+```
+
+Run docker compose to start up services:
+
+```bash
+docker-compose up
+```
+
+Docker down or shutdown services:
+
+```bash
+docker-compose down
+```
 
 To run a initial test of the training and fine tuning with 3 images from the training set using Qwen3-VL model, follow the instructions inside the `fine_tune_mlflow.ipynb` notebook.
 
@@ -111,3 +137,21 @@ For upcoming deployment steps we will be using Docker with docker compose files 
 ## Progressive Design Updates
 
 We decided to change the used model to an alternative Qwen3-VL model named: [Qwen3-VL-2B-Instruct-unsloth-bnb-4bit](https://huggingface.co/unsloth/Qwen3-VL-2B-Instruct-unsloth-bnb-4bit). We noticed that the previous model took a long time to run locally and therefore sought out a more lightweight version. This one utilizes quantization, which essentially means that the precision of the data type is decreased to save memory and computation.
+
+## Code/Docker file references
+**Repository Structure:**
+- `docker-compose.yml` - Docker setup for all services
+- `fine_tune_mlflow.ipynb` - Main training notebook
+- `app/` - FastAPI application code
+- `requirements.txt` & `environment.yml` - Dependencies
+
+
+## Conclusion and Reflection
+
+The project successfully implemented an invoice processing system using a pre-trained Qwen3-VL-2B model. Docker containerization worked well for consistent deployment, and MLFlow effectively tracked experiments.FastAPI provided a robust API for the application.
+
+However, the main challenge was fine-tuning, where results sometimes worsened rather than improved, and integrating all components into a complete pipeline required significant effort.
+
+Given more time, we would focus on improving the project structure, conducting more thorough testing, and experimenting with better fine-tuning approaches.
+
+The current solution remains a development prototype with limitations in handling diverse invoice formats and lacks production features like load balancing or advanced monitoring.
