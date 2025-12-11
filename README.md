@@ -103,7 +103,8 @@ py -m pip install -r requirements.txt
 ```
 If want start MLFlow server locally, run:
 
-```mlflow ui --backend-store-uri sqlite:///mlflow.db
+```bash
+mlflow ui --backend-store-uri sqlite:///mlflow.db
 ```
 To run training/evaluation 
 ```bash
@@ -133,6 +134,37 @@ For upcoming deployment steps we will be using Docker with docker compose files 
 **MLFlow** will be used to serve the latest pre-trained model to docker.
 
 **FastAPI** will act as the hosting server which provides the API for our application that is well suited for production.
+
+### Model Deployment and Inference Serving
+
+The system is deployed locally using Docker Compose with two main services:
+
+1. **Invoice Processing API** (FastAPI) - Port 8000
+   - Loads the fine-tuned Qwen3-VL model from MLFlow checkpoints
+   - Provides REST API for invoice processing
+   - Model checkpoints are stored in `./src/mlflow/mlruns/`
+
+2. **Web Interface** (Gradio UI) - Port 7860
+   - User-friendly interface for uploading invoices
+   - Displays extracted information
+   - Communicates with the API backend
+
+**How to Use:**
+
+After starting with `docker-compose up`:
+
+**Option 1: Use the Web Interface (Recommended)**
+- Go to: http://localhost:7860
+- Upload an invoice image
+- View extracted information directly in the browser
+
+**Option 2: Use the API Directly**
+```bash
+curl -X POST "http://localhost:8000/process-invoice" \
+  -F "file=@path/to/invoice.jpg"
+
+
+
 
 ## Progressive Design Updates
 
