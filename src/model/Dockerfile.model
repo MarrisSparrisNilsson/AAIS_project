@@ -1,0 +1,31 @@
+# CPU-only Dockerfile for MLflow Fine-tuned Model with FastAPI
+FROM python:3.13-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements first (for better Docker layer caching)
+COPY src/model/requirements_model.txt requirements.txt
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY src/model/app.py .
+
+# Expose FastAPI port
+EXPOSE 8000
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV MLFLOW_TRACKING_URI=sqlite:///mlflow.db
+
+# Run FastAPI server
+CMD ["python", "app.py"]
+

@@ -1,0 +1,36 @@
+image_path,invoice_nr_gt,date_gt,total_amount_gt,invoice_nr_pred,date_pred,total_amount_pred,raw_prediction
+../../invoices_dataset/eval_data/dataset1_katanaml_train_katanaml_0001.png,40378170,10/15/2012,"8,25",40378170,10/15/2012,8.25,"```json
+{
+  ""invoice_nr"": ""40378170"",
+  ""date"": ""10/15/2012"",
+  ""total_amount"": ""8.25""
+}
+```"
+../../invoices_dataset/eval_data/dataset1_katanaml_train_katanaml_0002.png,61356291,09/06/2012,"212,09",61356291,09/06/2012,"192,81","```json
+{
+  ""invoice_nr"": ""61356291"",
+  ""date"": ""09/06/2012"",
+  ""total_amount"": ""192,81""
+}
+```"
+../../invoices_dataset/eval_data/dataset1_katanaml_train_katanaml_0003.png,49565075,10/28/2019,"96,73",49565075,10/28/2019,"$87,94","```json
+{
+  ""invoice_nr"": ""49565075"",
+  ""date"": ""10/28/2019"",
+  ""total_amount"": ""$87,94""
+}
+```"
+../../invoices_dataset/eval_data/dataset1_katanaml_train_katanaml_0004.png,95611677,07/19/2016,"1054,10",95611677,07/19/2016,"1054,10","```json
+{
+  ""invoice_nr"": ""95611677"",
+  ""date"": ""07/19/2016"",
+  ""total_amount"": ""1054,10""
+}
+```"
+../../invoices_dataset/eval_data/dataset1_katanaml_train_katanaml_0005.png,26020078,11/19/2019,"116,52",26020078,11/19/2019,"116,52","```json
+{
+  ""invoice_nr"": ""26020078"",
+  ""date"": ""11/19/2019"",
+  ""total_amount"": ""116,52""
+}
+```"

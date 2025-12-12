@@ -1,16 +1,17 @@
 services:
+  # Invoice Extraction Model API
   invoice-api:
     build:
       context: .
-      dockerfile: Dockerfile.model
+      dockerfile: src/model/Dockerfile.model
     container_name: invoice-extraction-api
     ports:
       - "8000:8000"
     volumes:
-      # Mount mlruns directory (so model updates don't require rebuild)
-      - ./mlruns:/app/mlruns
+      # Mount mlruns directory
+      - ./src/mlflow/mlruns:/app/mlruns
       # Mount mlflow.db (so MLflow data persists)
-      - ./mlflow.db:/app/mlflow.db
+      - ./src/mlflow/mlflow.db:/app/mlflow.db
       # Mount invoices dataset (for testing purposes)
       - ./invoices_dataset:/app/invoices_dataset
     environment:
@@ -26,10 +27,11 @@ services:
       timeout: 10s
       retries: 3
 
+  # Gradio UI for Invoice Extraction
   gradio-ui:
     build:
       context: .
-      dockerfile: frontend/Dockerfile.gradio
+      dockerfile: src/frontend/Dockerfile.gradio
     container_name: gradio-invoice-ui
     ports:
       - "7860:7860"
@@ -46,4 +48,3 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-
