@@ -471,8 +471,6 @@ with gr.Blocks() as demo:
         outputs=[approved_modal_image, approved_modal_json, approved_modal],
     )
 
-    close_approved_modal_btn.click(fn=lambda: gr.update(visible=False), inputs=[], outputs=[approved_modal])
-
     # API endpoints for checkbox toggling
     toggle_checkbox_api = gr.Number(visible=False)
     toggle_checkbox_api.change(
