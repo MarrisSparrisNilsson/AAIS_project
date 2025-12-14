@@ -12,13 +12,9 @@
 
 ### Motivation
 
-<!-- What is the real-world problem being tackled? -->
-
 In a real world scenario, businesses handle a lot of invoice documents that are to be processed and information to be extracted from them. Some businesses might already have an automatic document process pipeline that is triggered right when an order is placed and stores all information in a database. On the other hand, if documents are not automatically handled, this project aims to handle invoices by scanning these documents with the help of state-of-the-art Optical Character Recognition (OCR) and extracting relevant information (such as invoice number, invoice date, total cost).
 
 ### Pre-trained model/method
-
-<!-- What pre-trained AI/ML models or algorithms are planned to be used and improved. The project can focus on issues other than accuracy (e.g., time, memory, parallelization etc.) -->
 
 To get an understanding of what models might be of most use to us, we found [this survey](https://ieeexplore.ieee.org/document/11193825) by Khan et al., published on October 6th, 2025, which details the prominence of various machine learning methods for the task of text extraction. According to its findings, Visual Transformers (ViT) and Generative Adversarial Networks (GAN) are the most prominent architectures today, with ViTs being better for multilingual documents and GANs being better when the quality of the image is poor. Given that our current datasets mostly consist of clear images and PDFs, with a few different languages present, we draw the conclusion that focusing on ViTs is most appropriate.
 
@@ -29,6 +25,7 @@ Reviewing the models available on [Hugging Face](https://huggingface.co/models?p
 Given the above findings, we elected to utilize [**Qwen3-VL-2B**](https://huggingface.co/docs/transformers/model_doc/qwen3_vl), which is a multi-modal vision-language model that is good for visual understanding and processing of text information. Our plan is to fine-tune this model for the tasks outlined below.
 
 #### Planned program flow:
+
 ![Invoice -> Model -> Structured output of Invoice -> Model (OCR) -> Text -> Model (Structure of important info) -> Structured output -> Enter invoice information in database -> Display in inventory UI.](README_images/idea.jpg)
 
 1. **Input:** User provides an invoice as an image or PDF.
@@ -39,25 +36,28 @@ Given the above findings, we elected to utilize [**Qwen3-VL-2B**](https://huggin
 6. **Visible Change:** The user can inspect the updated database directly through a web-based UI.
 
 #### AI Component: System Overview
+
 - User Interaction:
-    End-users interact with the system through a web-based UI. They upload an invoice image file (e.g., PNG or JPG format) via a drag-and-drop interface or file selector. The system then processes the invoice automatically and displays the extracted information for review.
+  End-users interact with the system through a web-based UI. They upload an invoice image file (e.g., PNG or JPG format) via a drag-and-drop interface or file selector. The system then processes the invoice automatically and displays the extracted information for review.
 - Outputs:
-    The system generates structured JSON documents containing the extracted invoice information, such as invoice number, products purchased, total cost, and vendor details. 
+  The system generates structured JSON documents containing the extracted invoice information, such as invoice number, products purchased, total cost, and vendor details.
 
 ### Experiment and Dataset
 
-<!-- What dataset is planned to be used, and how to collect data for the project -->
+The primary datasets that will be used are various invoice datasets gathered from _Huggingface_. These datasets were chosen due to the seemingly limited supply of good quality datasets that contains both invoice images and their belonging ground-truth data. There were for example other datasets of invoices without any ground truth data, and for those datasets it would be quite difficult for a task like this to evaluate if the extracted information was correct or not. Of course you could perhaps verify it by a manual approach but that would probably be very time consuming.
 
-The primary datasets that will be used are various invoice datasets gathered from _Huggingface_. The datasets include **images of invoices** (currently +2000 images) together with the **truth text data** within the images in json format.
+The datasets include **images of invoices** (currently +2000 images) together with the **truth text data** within the images in json format.
+
+Some realizations that later happened was that some parts of the dataset did not contain all desired fields, which was not highlighted until very late due to the mistake of insufficient data analysis and pre-processing.
 
 **Links to datasets:**
 
--   https://huggingface.co/datasets/katanaml-org/invoices-donut-data-v1
--   https://huggingface.co/datasets/doceoSoftware/docvqa_invoices_v1
--   https://huggingface.co/datasets/Aoschu/German_invoices_dataset
--   https://huggingface.co/datasets/michalaerson/annotated-energy-invoices
--   https://huggingface.co/datasets/ilhamxx/xdata_invoices
--   https://huggingface.co/datasets/featsystems/invoices
+- https://huggingface.co/datasets/katanaml-org/invoices-donut-data-v1
+- https://huggingface.co/datasets/doceoSoftware/docvqa_invoices_v1
+- https://huggingface.co/datasets/Aoschu/German_invoices_dataset
+- https://huggingface.co/datasets/michalaerson/annotated-energy-invoices
+- https://huggingface.co/datasets/ilhamxx/xdata_invoices
+- https://huggingface.co/datasets/featsystems/invoices
 
 ---
 
@@ -114,6 +114,7 @@ If you want to start the MLFlow server locally (and thus be able to observe the 
 ```bash
 cd src/mlflow
 ```
+
 ... then run:
 
 ```bash
@@ -127,10 +128,13 @@ To run an initial test of the training and fine tuning with 3 images from the tr
 **Note:** Running the fine-tuning and evaluation requires access to a **cuda GPU** with around 8-12 GB VRAM.
 
 To run a simple evaluation script comparing the base, pre-trained model to the latest fine-tuned model, navigate to the mlflow directory under src:
+
 ```bash
 cd src/mlflow
 ```
+
 ... then run:
+
 ```bash
 python evaluation.py
 ```
@@ -142,6 +146,7 @@ Run docker compose to start up services:
 ```bash
 docker-compose up -d --build
 ```
+
 **--build** should be skipped on subsequent runs, only required to build the images for the first run (or after changes have been made to either code or model)
 
 Docker down or shutdown services:
@@ -171,6 +176,7 @@ For upcoming deployment steps we will be using Docker with docker compose files 
 The system is deployed locally using Docker Compose with two main services:
 
 1. **Invoice Processing API** (FastAPI) - Port 8000
+
    - Loads the fine-tuned Qwen3-VL model from MLFlow checkpoints
    - Provides REST API for invoice processing
    - Model checkpoints are stored in `./src/mlflow/mlruns/`
@@ -185,31 +191,34 @@ The system is deployed locally using Docker Compose with two main services:
 After starting with `docker-compose up`:
 
 **Option 1: Use the Web Interface (Recommended)**
+
 - Go to: http://localhost:7861
 - Upload an invoice image
 - View extracted information directly in the browser
 
 **Option 2: Use the API Directly**
+
 ```bash
 curl -X POST "http://localhost:8000/process-invoice" \
   -F "file=@path/to/invoice.jpg"
 ```
-
 
 ## Progressive Design Updates
 
 We decided to change the used model to an alternative Qwen3-VL model named: [Qwen3-VL-2B-Instruct-unsloth-bnb-4bit](https://huggingface.co/unsloth/Qwen3-VL-2B-Instruct-unsloth-bnb-4bit). We noticed that the previous model took a long time to run locally and therefore sought out a more lightweight version. This one utilizes quantization, which essentially means that the precision of the data type is decreased to save memory and computation.
 
 #### Actual program flow:
+
 ![Invoice -> Model -> Structured output of Invoice -> Model (OCR) -> Text -> Model (Structure of important info) -> Structured output -> Enter invoice information in database -> Display in inventory UI.](README_images/c_idea.png)
 
 ## Code/Docker file references
+
 **Repository Structure:**
+
 - `docker-compose.yml` - Docker setup for all services
 - `src/mlflow/fine_tune_mlflow.ipynb` - Main training notebook
 - `src/model/app/` - FastAPI application code
 - `requirements.txt` & `environment.yml` - Dependencies
-
 
 ## Conclusion and Reflection
 
