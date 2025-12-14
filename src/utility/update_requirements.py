@@ -169,13 +169,13 @@ def update_requirements_txt():
     subprocess.run(["pip", "install", "pip-tools"])
 
     # Get top-level packages (like pip list --not-required)
-    subprocess.run(["pip-compile", "requirements.in", "--output-file", "requirements.txt"])
+    subprocess.run(["pip-compile", "requirements.in", "--output-file", "../../requirements.txt"])
 
     print(f"Requirements.txt updated successfully.")
 
 
 def remove_torch_block():
-    path = Path("requirements.txt").resolve()
+    path = Path("../../requirements.txt").resolve()
 
     if not path.exists():
         print("File not found.")

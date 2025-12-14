@@ -9,7 +9,7 @@ def find_exact_duplicates_simple():
     unified_dir = "src/mlflow/invoices_dataset/unified_dataset"
     images_dir = f"{unified_dir}/images"
     
-    print("🔍 FINDING EXACT DUPLICATES (MD5 HASH)")
+    print("FINDING EXACT DUPLICATES (MD5 HASH)")
     print("=" * 50)
     
     # Calculate MD5 hashes for all images
@@ -31,12 +31,12 @@ def find_exact_duplicates_simple():
         if len(files) > 1:
             duplicate_groups.append(files)
     
-    print(f"📊 Found {len(duplicate_groups)} duplicate groups")
-    print(f"📊 Total duplicate files: {sum(len(group) - 1 for group in duplicate_groups)}")
+    print(f"Found {len(duplicate_groups)} duplicate groups")
+    print(f"Total duplicate files: {sum(len(group) - 1 for group in duplicate_groups)}")
     
     # Show examples
     for i, group in enumerate(duplicate_groups[:5]):
-        print(f"\n🔍 Group {i+1}:")
+        print(f"\nGroup {i+1}:")
         print(f"   Keep: {group[0]}")
         for duplicate in group[1:]:
             print(f"   Remove: {duplicate}")
@@ -54,7 +54,7 @@ def remove_duplicates_simple(duplicate_groups):
     for group in duplicate_groups:
         files_to_remove.update(group[1:])  # Remove all but first file
     
-    print(f"\n🗑️  Removing {len(files_to_remove)} duplicate files...")
+    print(f"\nRemoving {len(files_to_remove)} duplicate files...")
     
     # Create clean directory
     temp_dir = f"{unified_dir}_clean"
@@ -85,8 +85,8 @@ if __name__ == "__main__":
         response = input(f"\nRemove {sum(len(group)-1 for group in duplicates)} duplicates? (y/N): ")
         if response.lower() == 'y':
             removed_count = remove_duplicates_simple(duplicates)
-            print(f"✅ Removed {removed_count} duplicate files")
+            print(f"Removed {removed_count} duplicate files")
         else:
-            print("❌ Operation cancelled")
+            print("Operation cancelled")
     else:
-        print("🎉 No exact duplicates found!")
+        print("No exact duplicates found!")

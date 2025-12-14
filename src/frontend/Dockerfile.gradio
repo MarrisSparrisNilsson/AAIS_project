@@ -10,7 +10,7 @@ COPY src/frontend/requirements_frontend.txt requirements.txt
 RUN pip install --upgrade pip 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY frontend/gradio_invoice_processor.py app.py
+COPY src/frontend/gradio_invoice_processor.py app.py
 
 EXPOSE 7860
 
