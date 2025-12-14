@@ -156,7 +156,7 @@ docker-compose down
 
 ### Update `requirements.txt`
 
-> Run the `update_requirements.py` to generate _top-level dependencies_ from your current `.venv`.
+> Run the `update_requirements.py` (found under src/utility) to generate _top-level dependencies_ from your current `.venv`.
 
 ## Deployment
 
