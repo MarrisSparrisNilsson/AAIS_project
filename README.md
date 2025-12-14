@@ -48,7 +48,7 @@ Given the above findings, we elected to utilize [**Qwen3-VL-2B**](https://huggin
 
 <!-- What dataset is planned to be used, and how to collect data for the project -->
 
-The primary datasets that will be used are various invoice datasets gathered from _Huggingface_. The datasets include **images of invoices** (currently +2000 images) together with the **truth text data** within the images in json format. We also intend to compose a small dataset, consisting of invoices recieved by the members of the team.
+The primary datasets that will be used are various invoice datasets gathered from _Huggingface_. The datasets include **images of invoices** (currently +2000 images) together with the **truth text data** within the images in json format.
 
 **Links to datasets:**
 
@@ -71,7 +71,7 @@ The primary datasets that will be used are various invoice datasets gathered fro
 
 **Experiment Details:**
 
-Our first fine-tuning experiments consisted of tuning the OCR model to solely output the detected invoice number. These experiments are implemented in the `fine_tune_mlflow.ipynb` notebook along with the utilized hyperparameters, optimizers and metrics. To cut down on the training time, we only fine-tune about 1.1% of the model's 2 billion parameters. Below are a few screenshots from MLFlow:
+Our first fine-tuning experiments consisted of tuning the OCR model to solely output the detected invoice number, date of issue, and total gross amount. These experiments are implemented in the `fine_tune_mlflow.ipynb` notebook along with the utilized hyperparameters, optimizers and metrics. To cut down on the training time, we only fine-tune about 1.1% of the model's 2 billion parameters. Below are a few screenshots from MLFlow:
 
 <img src="README_images/runs.png" alt="Screenshot from MLFlow of Runs screen" width=650/>
 
@@ -85,9 +85,9 @@ This screenshot shows the loss metric decreasing over the training steps as the 
 
 This screenshot shows the artifacts produced by our latest run. Among the artifacts are the dependencies of the model (in terms of Python packages) and the checkpoint for the trained parts of the model at the final training step.
 
-**Initial Experiment Insights**
+**Experiment Insights**
 
-From what we have seen, it would appear that the model which we selected can be fine-tuned to perform the tasks we require with relative ease. Further testing with larger subsets of the found datasets will be needed to truly assess how well the model can be fine-tuned, along with the implementation of some form of accuracy metric in order to check that the model outputs the correct information.
+Based on the evaluation that we have performed (on 200 images from the first dataset), our limited attempts at fine-tuning have not improved the model's performance. As can be seen in the runs logged to MLFlow, the base, pre-trained model outperforms the fine-tuned version considerably, with an overall accuracy of around 87% (0.87), compared to the fine-tuned's 24% (0.24). This result likely stems from the extremely limited dataset cleaned and prepared for the fine-tuning process, and we believe that by incorporating more of the datasets that we selected, we could substantially improve the results.
 
 ## Project Installation and Setup
 
@@ -102,21 +102,43 @@ If you are using **virtual Python environments**, run:
 ```bash
 py -m pip install -r requirements.txt
 ```
-If want start MLFlow server locally, run:
+
+---
+
+If you want to start the MLFlow server locally (and thus be able to observe the results of the logged runs), navigate to the mlflow directory under src:
+
+```bash
+cd src/mlflow
+```
+... then run:
 
 ```bash
 mlflow ui --backend-store-uri sqlite:///mlflow.db
 ```
-To run training/evaluation 
+
+---
+
+To run an initial test of the training and fine tuning with 3 images from the training set using the Qwen3-VL model, follow the instructions inside the `fine_tune_mlflow.ipynb` notebook.
+
+**Note:** Running the fine-tuning and evaluation requires access to a **cuda GPU** with around 8-12 GB VRAM.
+
+To run a simple evaluation script comparing the base, pre-trained model to the latest fine-tuned model, navigate to the mlflow directory under src:
 ```bash
-python XXXXXXXXXXXXXXXXXXXXXXX
+cd src/mlflow
 ```
+... then run:
+```bash
+python evaluation.py
+```
+
+---
 
 Run docker compose to start up services:
 
 ```bash
-docker-compose up
+docker-compose up -d --build
 ```
+**--build** should be skipped on subsequent runs, only required to build the images for the first run (or after changes have been made to either code or model)
 
 Docker down or shutdown services:
 
@@ -124,15 +146,15 @@ Docker down or shutdown services:
 docker-compose down
 ```
 
-To run a initial test of the training and fine tuning with 3 images from the training set using Qwen3-VL model, follow the instructions inside the `fine_tune_mlflow.ipynb` notebook.
+**Note:** Starting the inference service and loading the model requires access to a **cuda GPU** with around 8-12 GB VRAM, which must also be made accesible to the Docker containers through installation of the NVIDA Container Toolkit ([instructions found here](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)) on the host machine.
 
-**Note:** Running the fine-tuning requires access to a **cuda GPU** with around 8-12 GB VRAM.
+**Additional Note:** The total size of the created images sits around 16-17 GB, with the inference server taking up 14-15 of those. Keep this in mind when building the images.
 
 ## Deployment
 
-For upcoming deployment steps we will be using Docker with docker compose files to start up services, such as the `vlm-processor`, `database`, and `web-ui`.
+For upcoming deployment steps we will be using Docker with docker compose files to start up services, such as the `invoice-api` and `gradio-ui`.
 
-**MLFlow** will be used to serve the latest pre-trained model to docker.
+**MLFlow** can be used to serve the latest pre-trained model to docker.
 
 **FastAPI** will act as the hosting server which provides the API for our application that is well suited for production.
 
@@ -145,7 +167,7 @@ The system is deployed locally using Docker Compose with two main services:
    - Provides REST API for invoice processing
    - Model checkpoints are stored in `./src/mlflow/mlruns/`
 
-2. **Web Interface** (Gradio UI) - Port 7860
+2. **Web Interface** (Gradio UI) - Port 7861
    - User-friendly interface for uploading invoices
    - Displays extracted information
    - Communicates with the API backend
@@ -155,7 +177,7 @@ The system is deployed locally using Docker Compose with two main services:
 After starting with `docker-compose up`:
 
 **Option 1: Use the Web Interface (Recommended)**
-- Go to: http://localhost:7860
+- Go to: http://localhost:7861
 - Upload an invoice image
 - View extracted information directly in the browser
 
@@ -164,8 +186,6 @@ After starting with `docker-compose up`:
 curl -X POST "http://localhost:8000/process-invoice" \
   -F "file=@path/to/invoice.jpg"
 ```
-
-
 
 
 ## Progressive Design Updates
@@ -178,8 +198,8 @@ We decided to change the used model to an alternative Qwen3-VL model named: [Qwe
 ## Code/Docker file references
 **Repository Structure:**
 - `docker-compose.yml` - Docker setup for all services
-- `fine_tune_mlflow.ipynb` - Main training notebook
-- `app/` - FastAPI application code
+- `src/mlflow/fine_tune_mlflow.ipynb` - Main training notebook
+- `src/model/app/` - FastAPI application code
 - `requirements.txt` & `environment.yml` - Dependencies
 
 
