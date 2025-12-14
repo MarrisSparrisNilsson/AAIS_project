@@ -48,3 +48,25 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+
+  # Gradio UI for Invoice Extraction (Old, functioning version)
+  gradio-ui-old:
+    build:
+      context: .
+      dockerfile: src/frontend/Dockerfile.gradio_old
+    container_name: gradio-invoice-ui-old
+    ports:
+      - "7861:7861"
+    volumes:
+      - ./invoices_dataset:/app/invoices_dataset
+    environment:
+      - BACKEND_URL=http://invoice-api:8000
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    depends_on:
+      - invoice-api
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7861/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

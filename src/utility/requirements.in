@@ -1,0 +1,22 @@
+# torch==2.9.0
+# torchvision==0.24.0
+# ====== Updated: 2025-12-09 10:32:42 ======
+
+chronos-forecasting==2.1.0
+gradio==6.0.2
+SQLAlchemy==2.0.44
+hf-xet==1.2.0
+httpx==0.28.1
+pandas==2.3.3
+pip-tools==7.5.2
+pipreqs==0.4.13
+pyarrow==22.0.0
+shellingham==1.5.4
+typer-slim==0.20.0
+mlflow==3.7.0
+backports.tarfile==1.2.0
+wcwidth==0.2.14
+webcolors==25.10.0
+webencodings==0.5.1
+websocket-client==1.9.0
+

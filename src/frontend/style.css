@@ -1,0 +1,16 @@
+.gradio-container {
+	width: 800px !important;
+	margin: auto;
+}
+
+.invoice-card:hover {
+	cursor: pointer;
+	background-color: #f0f0f0;
+}
+
+.invoice-card-info {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}

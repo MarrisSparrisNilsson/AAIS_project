@@ -209,3 +209,4 @@ __marimo__/
 unsloth_compiled_cache/
 outputs/
 mlruns/.trash
+approved_invoices.*

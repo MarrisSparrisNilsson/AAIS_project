@@ -45,12 +45,12 @@ The primary datasets that will be used are various invoice datasets gathered fro
 
 **Links to datasets:**
 
-- https://huggingface.co/datasets/katanaml-org/invoices-donut-data-v1
-- https://huggingface.co/datasets/doceoSoftware/docvqa_invoices_v1
-- https://huggingface.co/datasets/Aoschu/German_invoices_dataset
-- https://huggingface.co/datasets/michalaerson/annotated-energy-invoices
-- https://huggingface.co/datasets/ilhamxx/xdata_invoices
-- https://huggingface.co/datasets/featsystems/invoices
+-   https://huggingface.co/datasets/katanaml-org/invoices-donut-data-v1
+-   https://huggingface.co/datasets/doceoSoftware/docvqa_invoices_v1
+-   https://huggingface.co/datasets/Aoschu/German_invoices_dataset
+-   https://huggingface.co/datasets/michalaerson/annotated-energy-invoices
+-   https://huggingface.co/datasets/ilhamxx/xdata_invoices
+-   https://huggingface.co/datasets/featsystems/invoices
 
 ---
 
@@ -90,7 +90,11 @@ If you are using **Conda environments**, run:
 conda env create -f environment.yml
 ```
 
-If you are using **virtual Python environments**, run:
+If you are using **virtual Python environments**:
+
+> Run `install_dependencies.py` to install `requirements.txt` packages and `pytorch` installation.
+
+Or do it manually by running:
 
 ```bash
 py -m pip install -r requirements.txt
@@ -99,6 +103,10 @@ py -m pip install -r requirements.txt
 To run a initial test of the training and fine tuning with 3 images from the training set using Qwen3-VL model, follow the instructions inside the `fine_tune_mlflow.ipynb` notebook.
 
 **Note:** Running the fine-tuning requires access to a **cuda GPU** with around 8-12 GB VRAM.
+
+### Update `requirements.txt`
+
+> Run the `update_requirements.py` to generate _top-level dependencies_ from your current `.venv`.
 
 ## Deployment
 
