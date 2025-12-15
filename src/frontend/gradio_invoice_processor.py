@@ -7,6 +7,7 @@ from typing import Dict, List
 
 import gradio as gr
 from fastapi import requests
+from invoice_fields import FIELD_LABELS
 
 # Path to store approved invoices
 APPROVED_INVOICES_FILE = "approved_invoices.json"
@@ -14,6 +15,8 @@ APPROVED_INVOICES_FILE = "approved_invoices.json"
 BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8000")
 
 MLFLOW_MODEL_NAME = "qwen3vl_finetuned_extraction"
+
+ONLINE_MODE = False
 
 
 class InvoiceProcessor:
@@ -35,7 +38,7 @@ class InvoiceProcessor:
             json.dump(self.approved_invoices, f, indent=2)
 
     async def extract_information_from_image(self, image_path: str, index: int) -> Dict:
-        if True:
+        if ONLINE_MODE:
             """Extract invoice info by uploading to FastAPI backend."""
             if image_path is None:
                 return None, ""
@@ -61,7 +64,15 @@ class InvoiceProcessor:
                     state_json = raw_pred
 
                 # Output should have invoice, date, client, seller, total
-                return json.dumps(display_text, indent=2), json.dumps(state_json)
+                # return json.dumps(display_text, indent=2), json.dumps(state_json)
+                return {
+                    "id": f"invoice_{int(time.time())}_{index}",
+                    "file_path": image_path,
+                    "file_name": Path(image_path).name,
+                    "extracted_data": json.dumps(display_text, indent=2),
+                    "state_json": json.dumps(state_json),
+                    "checked": False,
+                }
 
             except Exception as e:
                 return f"Error connecting to backend: {str(e)}", ""
@@ -187,6 +198,24 @@ def create_approved_list_html(search_query: str = ""):
     for idx, invoice in enumerate(invoices):
         data = invoice["extracted_data"]
 
+        grid_html = ""
+
+        for field, value in data.items():
+            label = FIELD_LABELS.get(field, field.replace("_", " ").title())
+
+            FIELD_LABELS[field] = label  # Ensure label is stored for future use
+
+            grid_html += f"""
+            <div>
+                <div style='font-size: 12px; color: #666; margin-bottom: 4px;'>
+                    {label}:
+                </div>
+                <div style='font-weight: 600;'>
+                    {value}
+                </div>
+            </div>
+            """
+
         html += f"""
         <div style='border: 1px solid #ddd; border-radius: 6px; padding: 20px; background: white;
                     cursor: pointer; transition: background 0.2s;'
@@ -194,27 +223,9 @@ def create_approved_list_html(search_query: str = ""):
                 onmouseout='this.style.background="white"'
                 onclick='document.getElementById("approved_selector").value = "{idx}";
                         document.getElementById("approved_selector").dispatchEvent(new Event("change"));'>
+
             <div style='display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px;'>
-                <div>
-                    <div style='font-size: 12px; color: #666; margin-bottom: 4px;'>Invoice nr:</div>
-                    <div style='font-weight: 600;'>{data['invoice_nr']}</div>
-                </div>
-                <div>
-                    <div style='font-size: 12px; color: #666; margin-bottom: 4px;'>Date:</div>
-                    <div style='font-weight: 600;'>{data['date']}</div>
-                </div>
-                <div>
-                    <div style='font-size: 12px; color: #666; margin-bottom: 4px;'>Seller:</div>
-                    <div style='font-weight: 600;'>{data['seller']}</div>
-                </div>
-                <div>
-                    <div style='font-size: 12px; color: #666; margin-bottom: 4px;'>Client:</div>
-                    <div style='font-weight: 600;'>{data['client']}</div>
-                </div>
-                <div>
-                    <div style='font-size: 12px; color: #666; margin-bottom: 4px;'>Total:</div>
-                    <div style='font-weight: 600;'>{data['total']}</div>
-                </div>
+                {grid_html}
             </div>
         </div>
         """
@@ -234,16 +245,15 @@ def extract_information(files):
 
     processor.processed_invoices = []
 
+    # Single file upload
     if files is not list:
         idx = 0
-        # TODO: Replace with actual VLM model inference that extracts invoice data
         result = loop.run_until_complete(processor.extract_information_from_image(files, idx))
         processor.processed_invoices.append(result)
 
         view_extraction_invoice(idx)
     else:
         for idx, file in enumerate(files):
-            # TODO: Replace with actual VLM model inference that extracts invoice data
             result = loop.run_until_complete(processor.extract_information_from_image(file, idx))
             processor.processed_invoices.append(result)
 
@@ -306,6 +316,7 @@ def approve_invoices():
         None,
         None,
         "",
+        "",
         gr.update(interactive=False),
         gr.update(interactive=False),
     )
@@ -314,7 +325,7 @@ def approve_invoices():
 def deny_invoices():
     """Clear all processed invoices"""
     processor.processed_invoices = []
-    return (create_invoice_list_html(), None, None, None)
+    return (create_invoice_list_html(), None, None, None, "")
 
 
 def view_extraction_invoice(idx: str):
@@ -323,7 +334,12 @@ def view_extraction_invoice(idx: str):
         idx = int(idx)
         if 0 <= idx < len(processor.processed_invoices):
             invoice = processor.processed_invoices[idx]
-            return (invoice["file_path"], json.dumps(invoice["extracted_data"], indent=2), gr.update(visible=True))
+            return (
+                invoice["file_path"],
+                json.dumps(invoice["extracted_data"], indent=2),
+                json.dumps(invoice["state_json"], indent=2),
+                gr.update(visible=True),
+            )
     except:
         pass
     return None, "", gr.update(visible=False)
@@ -335,7 +351,12 @@ def view_approved_invoice(idx: str):
         idx = int(idx)
         if 0 <= idx < len(processor.approved_invoices):
             invoice = processor.approved_invoices[idx]
-            return (invoice["file_path"], json.dumps(invoice["extracted_data"], indent=2), gr.update(visible=True))
+            return (
+                invoice["file_path"],
+                json.dumps(invoice["extracted_data"], indent=2),
+                json.dumps(invoice["state_json"], indent=2),
+                gr.update(visible=True),
+            )
     except:
         pass
     return None, "", gr.update(visible=False)
@@ -351,6 +372,8 @@ with gr.Blocks() as demo:
     mark_all_label = gr.State("Mark all")
 
     gr.Markdown("# Invoice Processing System")
+
+    prediction_state = gr.State(value="")
 
     with gr.Tabs() as tabs:
         # Extraction Tab
@@ -420,10 +443,10 @@ with gr.Blocks() as demo:
         fn=lambda: (
             view_extraction_invoice("0")
             if len(processor.processed_invoices) > 0
-            else (None, "", gr.update(visible=False))
+            else (None, "", "", gr.update(visible=False))
         ),
         inputs=[],
-        outputs=[extraction_modal_image, extraction_modal_json, extraction_modal],
+        outputs=[extraction_modal_image, extraction_modal_json, prediction_state, extraction_modal],
     )
 
     mark_all_btn.click(
@@ -440,7 +463,7 @@ with gr.Blocks() as demo:
     invoice_selector.change(
         fn=view_extraction_invoice,
         inputs=[invoice_selector],
-        outputs=[extraction_modal_image, extraction_modal_json, extraction_modal],
+        outputs=[extraction_modal_image, extraction_modal_json, prediction_state, extraction_modal],
     )
 
     approve_btn.click(
@@ -453,13 +476,16 @@ with gr.Blocks() as demo:
             file_upload,
             extraction_modal_image,
             extraction_modal_json,
+            prediction_state,
             approve_btn,
             deny_btn,
         ],
     )
 
     deny_btn.click(
-        fn=deny_invoices, inputs=[], outputs=[invoice_list, file_upload, extraction_modal_image, extraction_modal_json]
+        fn=deny_invoices,
+        inputs=[],
+        outputs=[invoice_list, file_upload, extraction_modal_image, extraction_modal_json, prediction_state],
     )
 
     # Event handlers for Approved Tab
