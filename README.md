@@ -18,13 +18,18 @@ In a real world scenario, businesses handle a lot of invoice documents that are 
 
 To get an understanding of what models might be of most use to us, we found [this survey](https://ieeexplore.ieee.org/document/11193825) by Khan et al., published on October 6th, 2025, which details the prominence of various machine learning methods for the task of text extraction. According to its findings, Visual Transformers (ViT) and Generative Adversarial Networks (GAN) are the most prominent architectures today, with ViTs being better for multilingual documents and GANs being better when the quality of the image is poor. Given that our current datasets mostly consist of clear images and PDFs, with a few different languages present, we draw the conclusion that focusing on ViTs is most appropriate.
 
+> **_"So why not use just use a traditional OCR model? Is a VLM model really needed?"_**
+> Well, our thought process is that a regular OCR model would probably be sufficient enough for a standard text extraction task. However, when it comes to extracting information from an invoice document where it's necessary to understand the layout, a more advanced approach such as a VLM is mostly needed to capture data correctly according to the structure. For example reading the document sequentially in a table might not give us the right order of the information which would make the information harder to interpret.
+
 According to our estimations, multi-modal VLMs with a maximum of 6B billion parameters or less would be suited for our application in order to run it on our local machine. If the accuracy becomes too poor or we find that the capabilities of the model is too limited, we will look at models with a larger amount of parameters and try to run it on an A-100 GPU.
+
+**Update:** 6B parameter model proved to be a bit too large for running locally since it took an extensive amount of time to run.
 
 Reviewing the models available on [Hugging Face](https://huggingface.co/models?pipeline_tag=image-text-to-text&sort=downloads) revealed that when sorting on most downloaded models for the task of Image-text-to-Text, four out of the top five are versions of the Qwen-model.
 
 Given the above findings, we elected to utilize [**Qwen3-VL-2B**](https://huggingface.co/docs/transformers/model_doc/qwen3_vl), which is a multi-modal vision-language model that is good for visual understanding and processing of text information. Our plan is to fine-tune this model for the tasks outlined below.
 
-#### Planned program flow:
+### Planned program flow:
 
 ![Invoice -> Model -> Structured output of Invoice -> Model (OCR) -> Text -> Model (Structure of important info) -> Structured output -> Enter invoice information in database -> Display in inventory UI.](README_images/idea.jpg)
 
@@ -48,7 +53,7 @@ The primary datasets that will be used are various invoice datasets gathered fro
 
 The datasets include **images of invoices** (currently +2000 images) together with the **truth text data** within the images in json format.
 
-Some realizations that later happened was that some parts of the dataset did not contain all desired fields, which was not highlighted until very late due to the mistake of insufficient data analysis and pre-processing.
+**Update:** Some realizations that later happened was that some parts of the dataset did not contain all desired fields, which was not highlighted until very late due to the mistake of insufficient data analysis and pre-processing.
 
 **Links to datasets:**
 
@@ -77,17 +82,13 @@ Our first fine-tuning experiments consisted of tuning the OCR model to solely ou
 
 This screenshot shows the runs performed using the latest model.
 
-<img src="README_images/loss.png" alt="Screenshot from MLFlow of loss metric decreasing over the training steps" width=650/>
-
-This screenshot shows the loss metric decreasing over the training steps as the model learns to adhere to the requested output, indicating that the fine-tuning process is successful.
-
 <img src="README_images/artifacts.png" alt="Screenshot from MLFlow of artifact screen of last succesful run" width=650/>
 
 This screenshot shows the artifacts produced by our latest run. Among the artifacts are the dependencies of the model (in terms of Python packages) and the checkpoint for the trained parts of the model at the final training step.
 
 **Experiment Insights**
 
-Based on the evaluation that we have performed (on 200 images from the first dataset), our limited attempts at fine-tuning have not improved the model's performance. As can be seen in the runs logged to MLFlow, the base, pre-trained model outperforms the fine-tuned version considerably, with an overall accuracy of around 87% (0.87), compared to the fine-tuned's 24% (0.24). This result likely stems from the extremely limited dataset cleaned and prepared for the fine-tuning process, and we believe that by incorporating more of the datasets that we selected, we could substantially improve the results.
+Based on the evaluation that we have performed (on 200 images from the first dataset), our limited attempts at fine-tuning have not improved the model's performance. As can be seen in the runs logged to MLFlow, the base, pre-trained model outperforms the fine-tuned version considerably, with an overall accuracy of around 0.87 (87%), compared to the fine-tuned's 0.24 (24%). This result likely stems from the extremely limited dataset cleaned and prepared for the fine-tuning process, and we believe that by incorporating more of the datasets that we selected, we could substantially improve the results.
 
 ## Project Installation and Setup
 
@@ -228,4 +229,4 @@ However, the main challenge was fine-tuning, where results sometimes worsened ra
 
 Given more time, we would focus on improving the project structure, conducting more thorough testing, and experimenting with better fine-tuning approaches.
 
-The current solution remains a development prototype with limitations in handling diverse invoice formats and lacks production features like load balancing or advanced monitoring.
+The current solution remains a development prototype with limitations in handling diverse invoice formats and lacks production features like cloud deployment, load balancing and advanced monitoring.
